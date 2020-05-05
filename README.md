@@ -22,7 +22,9 @@ $ roslaunch MAPR_elevation_map_project MAPR_elevation_map_project.launch
 
 1. run elevaiotn map
 
-2. in the new terminal run script - rosrun MAPR_elevation_map_project elevMapEmple.py
+2. in the new terminal run script 
+
+    $ rosrun MAPR_elevation_map_project elevMapEmple.py
 
 3. add topic "reflected_map" in rviz
 
