@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<launch>
+
+	<node pkg="rosbag" type="play" name="player" output="screen" args="--clock /home/kamil/catkin_ws/src/MAPR_elevation_map_project/maps/terrain_map.bag"/>
+
+  <!-- Launch RViz with the demo configuration. -->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find MAPR_elevation_map_project)/rviz/elevation_map.rviz" />
+
+</launch>
