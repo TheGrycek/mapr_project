@@ -3,7 +3,7 @@
 <launch>
 
   <!-- rosbag elevation map -->
-  <node pkg="rosbag" type="play" name="player" output="screen" args="--clock /home/kamil/catkin_ws/src/MAPR_elevation_map_project/maps/terrain_map.bag"/>
+  <node pkg="rosbag" type="play" name="player" output="screen" args="--clock $(find MAPR_elevation_map_project)/maps/terrain_map.bag"/>
 
   <!-- RViz -->
   <node name="rviz" pkg="rviz" type="rviz" args="-d $(find MAPR_elevation_map_project)/rviz/elevation_map.rviz" />
