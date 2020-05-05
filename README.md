@@ -8,7 +8,7 @@ $ sudo apt-get install ros-melodic-map-server ros-melodic-dwa-local-planner libo
 
 $ cd ~/catkin_ws/src
 
-$ git clone https://github.com/dominikbelter/ompl_example_2d
+$ git clone https://github.com/Kamilkim/MAPR_elevation_map_project.git
 
 $ cd ~/catkin_ws/
 
