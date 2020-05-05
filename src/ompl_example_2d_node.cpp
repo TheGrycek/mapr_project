@@ -37,7 +37,7 @@ int main(int argc, char** argv)
     ros::Publisher path_pub = nodeHandle.advertise<nav_msgs::Path>("planned_path", 1000);
 
     // occupancy map subscriber
-    ros::Subscriber map_sub = nodeHandle.subscribe("/map", 10, mapCallback);
+    ros::Subscriber map_sub = nodeHandle.subscribe("/map_copy", 10, mapCallback);
 
     while (ros::ok()){
         nav_msgs::Path plannedPath;
