@@ -9,7 +9,7 @@
   <node name="rviz" pkg="rviz" type="rviz" args="-d $(find MAPR_elevation_map_project)/rviz/elevation_map.rviz" />
 
   <!-- ompl-based motion planning node -->
-  <!--<node pkg="ompl_example_2d" name="ompl_example_2d_node" type="ompl_example_2d_node" output="screen" />-->
+  <node pkg="ompl_example_2d" name="ompl_example_2d_node" type="ompl_example_2d_node" output="screen" />
     
 
 </launch>
