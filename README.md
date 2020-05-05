@@ -25,3 +25,5 @@ $ roslaunch MAPR_elevation_map_project MAPR_elevation_map_project.launch
 2. in the new terminal run script - rosrun MAPR_elevation_map_project elevMapEmple.py
 
 3. add topic "reflected_map" in rviz
+
+![Mapa](https://github.com/Kamilkim/MAPR_elevation_map_project/blob/master/doc/Elevation_map.JPG)
