@@ -6,9 +6,6 @@ map_cpy = msg.GridMap()
 
 def callback(elev_map):
 
-   #print available layers
-   for n in elev_map.basic_layers:
-       print(n)
    # access the first layer (index 0) - elevation
    stride0 = elev_map.data[0].layout.dim[0].stride
    stride1 = elev_map.data[0].layout.dim[1].stride
