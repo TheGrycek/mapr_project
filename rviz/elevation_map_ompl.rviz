@@ -45,7 +45,7 @@ Visualization Manager:
       Offset:
         X: 0
         Y: 0
-        Z: 0
+        Z: 2
       Plane: XY
       Plane Cell Count: 10
       Reference Frame: <Fixed Frame>
@@ -94,6 +94,13 @@ Visualization Manager:
       Topic: /mapr_project_node/planned_path
       Unreliable: false
       Value: true
+    - Class: rviz/Axes
+      Enabled: true
+      Length: 1
+      Name: Axes
+      Radius: 0.10000000149011612
+      Reference Frame: <Fixed Frame>
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -122,25 +129,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/ThirdPersonFollower
-      Distance: 10.621050834655762
+      Distance: 25.177562713623047
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: -4.202713489532471
-        Y: 2.049485683441162
+        X: -4.319742202758789
+        Y: 2.8671131134033203
         Z: 0
       Focal Shape Fixed Size: false
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.6897969841957092
+      Pitch: 0.6197960376739502
       Target Frame: base_link
       Value: ThirdPersonFollower (rviz)
-      Yaw: 1.9585773944854736
+      Yaw: 4.936770439147949
     Saved: ~
 Window Geometry:
   Displays:

@@ -51,8 +51,8 @@ bool isStateValid(const ob::State *state){
 
     //! Comment this part of the code if you'd like to use occupancy grid
     //     define the obstacle
-     if (coordX->values[0]<5.1&&coordX->values[0]>5.0){
-        if (coordY->values[0]<4.0&&coordY->values[0]>-5.0){
+     if (coordX->values[0]<-3.1&&coordX->values[0]>-3.2){
+        if (coordY->values[0]<3.0&&coordY->values[0]>-2.0){
              return false;
          }
      }
@@ -195,13 +195,13 @@ void Planner2D::configure(void){
 
     // create bounds for the x axis
     coordXBound.reset(new ob::RealVectorBounds(dim-1));
-    coordXBound->setLow(-1.0);
-    coordXBound->setHigh(13.0);
+    coordXBound->setLow(-6.0);
+    coordXBound->setHigh(0.0);
 
     // create bounds for the y axis
     coordYBound.reset(new ob::RealVectorBounds(dim-1));
-    coordYBound->setLow(-5.0);
-    coordYBound->setHigh(5.0);
+    coordYBound->setLow(-2.0);
+    coordYBound->setHigh(4.0);
 
     // construct the state space we are planning in
     auto coordX(std::make_shared<ob::RealVectorStateSpace>(dim-1));
@@ -217,13 +217,13 @@ void Planner2D::configure(void){
     // define the start position
     start.reset(new ob::ScopedState<>(space));
     (*start.get())[0]=0.0;
-    (*start.get())[1]=-2.5;
+    (*start.get())[1]=0.0;
 //    start.get()->random();
 
     // define the goal position
     goal.reset(new ob::ScopedState<>(space));
-    (*goal.get())[0]=12.0;
-    (*goal.get())[1]=-4.0;
+    (*goal.get())[0]=-5.0;
+    (*goal.get())[1]=-1.0;
 //    goal.get()->random();
 }
 
