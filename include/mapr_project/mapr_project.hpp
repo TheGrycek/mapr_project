@@ -18,7 +18,7 @@
 #include <nav_msgs/Path.h>
 #include <nav_msgs/OccupancyGrid.h>
 #include <grid_map_msgs/GridMap.h>
-
+#include <std_msgs/UInt8.h>
 #include <moveit/ompl_interface/ompl_interface.h>
 #include <ompl/geometric/planners/rrt/RRTConnect.h>
 #include <ompl/base/spaces/RealVectorStateSpace.h>
@@ -57,8 +57,12 @@ public:
     /*!
    * plan path
    */
-    nav_msgs::Path planPath(const grid_map_msgs::GridMap& globalMap);
+//    nav_msgs::Path planPath(const grid_map_msgs::GridMap& globalMap);
    // nav_msgs::Path planPath(const nav_msgs::OccupancyGrid& globalMap);
+    nav_msgs::Path planPath(const grid_map_msgs::GridMap& globalMap);
+
+    void returnPoints(std_msgs::UInt8 pStartX, std_msgs::UInt8 pStartY,
+                      std_msgs::UInt8 pEndX, std_msgs::UInt8 pEndY);
 
 private:
     /// node handle
@@ -86,7 +90,7 @@ private:
     std::shared_ptr<ompl::base::StateSpace> space;
 
     /// configure node
-    void configure(void);
+    void configure(double point_start_x, double point_start_y, double point_end_x,double point_end_y);
 
     /// extract path
     nav_msgs::Path extractPath(ompl::base::ProblemDefinition* pdef);
