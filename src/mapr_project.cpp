@@ -91,21 +91,24 @@ bool isStateValid(const ob::State *state){
 
     //! Your code goes below
     // Hint: uncoment the code below:
-
-	
+	/*
     std::cout << "gridMap.info.pose.position.x " << gridMap.info.pose.position.x << "\n";
     std::cout << "gridMap.info.pose.position.y " << gridMap.info.pose.position.y << "\n";
     std::cout << "gridMap.info.pose.position.z " << gridMap.info.pose.position.z << "\n";
     std::cout << "gridMap.info.resolution " << gridMap.info.resolution << "\n";
     std::cout << "gridMap.info.length_x " << gridMap.info.length_x << "\n";
     std::cout << "gridMap.info.length_y " << gridMap.info.length_y << "\n";
-	/*
+	
     if(gridMap.info.length_x )
 	{
-      	   //std::cout << "gridMap.info.length_x -  " << gridMap.info.length_x << "\n";
+      	   std::cout << "gridMap.data[0].layout.dim[0].stride " << gridMap.data[0].layout.dim[0].stride << "\n";
+	   std::cout << "gridMap.data[0].layout.dim[1].stride " << gridMap.data[0].layout.dim[1].stride << "\n";
+	   std::cout << "gridMap.data[0].layout.dim[0].size " << gridMap.data[0].layout.dim[0].size << "\n";
+	   std::cout << "gridMap.data[0].layout.dim[1].size " << gridMap.data[0].layout.dim[1].size << "\n";
+	   std::cout << "gridMap.data[0].layout.data_offset " << gridMap.data[0].layout.data_offset << "\n";
+	   std::cout << "gridMap.data[0].data[1000] " << gridMap.data[0].data[1000] << "\n";
 	}
 	*/
-
     //! Your code goes above
     return true;
 }
@@ -113,7 +116,7 @@ bool isStateValid(const ob::State *state){
 /// extract path
 nav_msgs::Path Planner2D::extractPath(ob::ProblemDefinition* pdef){
     nav_msgs::Path plannedPath;
-    plannedPath.header.frame_id = "/map";
+    plannedPath.header.frame_id = "/odom";
     // get the obtained path
     ob::PathPtr path = pdef->getSolutionPath();
     // print the path to screen
@@ -139,7 +142,7 @@ nav_msgs::Path Planner2D::extractPath(ob::ProblemDefinition* pdef){
         poseMsg.pose.orientation.x = 0.0;
         poseMsg.pose.orientation.y = 0.0;
         poseMsg.pose.orientation.z = 0.0;
-        poseMsg.header.frame_id = "/map";
+        poseMsg.header.frame_id = "/odom";
         poseMsg.header.stamp = ros::Time::now();
         // ... and add the pose to the path
         plannedPath.poses.push_back(poseMsg);
