@@ -1,12 +1,12 @@
 /*
- * controllerUR_node.cpp
+ * mapr_project.cpp
  *
- *  Created on: Jun 3, 2017
- *      Author: Dominik Belter
- *   Institute: Instute of Robotics and Machine Intelligence, Poznan University of Technology
+ *  Created on: May 13, 2020
+ *      Author: Kamil Miedzinski Mateusz Grycmacher
+ *	 Institute: Instute of Home, Poznan University of Technology
  */
 
-#include "../include/ompl_example_2d/ompl_example_2d.hpp"
+#include "../include/mapr_project/mapr_project.hpp"
 
 // Boost
 #include <boost/bind.hpp>
@@ -24,10 +24,9 @@ using namespace ros;
 namespace ob = ompl::base;
 namespace og = ompl::geometric;
 
-namespace ompl_example_2d {
+namespace mapr_project {
 
-/// occupancy map used for planning
-nav_msgs::OccupancyGrid occupancyMap;
+grid_map_msgs::GridMap gridMap;
 
 Planner2D::Planner2D(ros::NodeHandle& _nodeHandle)
     : nodeHandle(_nodeHandle)
@@ -52,28 +51,28 @@ bool isStateValid(const ob::State *state){
 
     //! Comment this part of the code if you'd like to use occupancy grid
     //     define the obstacle
-//     if (coordX->values[0]<5.1&&coordX->values[0]>5.0){
-//        if (coordY->values[0]<4.0&&coordY->values[0]>-5.0){
-//             return false;
-//         }
-//     }
+     if (coordX->values[0]<5.1&&coordX->values[0]>5.0){
+        if (coordY->values[0]<4.0&&coordY->values[0]>-5.0){
+             return false;
+         }
+     }
 
     //! Comment this part of the code if you'd like to use occupancy grid
 
     //! Your code goes below
     // Hint: uncoment the code below:
 
-     int row, col;
-     float originX = occupancyMap.info.origin.position.x;
-     float originY = occupancyMap.info.origin.position.y;
-     float resolution = occupancyMap.info.resolution;
+     //int row, col;
+     //float originX = occupancyMap.info.origin.position.x;
+     //float originY = occupancyMap.info.origin.position.y;
+     //float resolution = occupancyMap.info.resolution;
 
-        col = ((coordX->values[0])-originX)/resolution;
+       // col = ((coordX->values[0])-originX)/resolution;
 
-        row = ((coordY->values[0])-originY)/resolution;
+       //row = ((coordY->values[0])-originY)/resolution;
 
 
-     if (occupancyMap.data.size())
+/*    if (occupancyMap.data.size())
      {
          for (int i = -5; i < 5; i++)
                 {
@@ -87,6 +86,26 @@ bool isStateValid(const ob::State *state){
                  }
 
      }
+*/
+    
+
+    //! Your code goes below
+    // Hint: uncoment the code below:
+
+	
+    std::cout << "gridMap.info.pose.position.x " << gridMap.info.pose.position.x << "\n";
+    std::cout << "gridMap.info.pose.position.y " << gridMap.info.pose.position.y << "\n";
+    std::cout << "gridMap.info.pose.position.z " << gridMap.info.pose.position.z << "\n";
+    std::cout << "gridMap.info.resolution " << gridMap.info.resolution << "\n";
+    std::cout << "gridMap.info.length_x " << gridMap.info.length_x << "\n";
+    std::cout << "gridMap.info.length_y " << gridMap.info.length_y << "\n";
+	/*
+    if(gridMap.info.length_x )
+	{
+      	   //std::cout << "gridMap.info.length_x -  " << gridMap.info.length_x << "\n";
+	}
+	*/
+
     //! Your code goes above
     return true;
 }
@@ -131,9 +150,12 @@ nav_msgs::Path Planner2D::extractPath(ob::ProblemDefinition* pdef){
 /*!
  * plan path
  */
-nav_msgs::Path Planner2D::planPath(const nav_msgs::OccupancyGrid& globalMap){
-    occupancyMap = globalMap;
-
+nav_msgs::Path Planner2D::planPath(const grid_map_msgs::GridMap& globalMap){
+    gridMap = globalMap;
+	
+//nav_msgs::Path Planner2D::planPath(const nav_msgs::OccupancyGrid& globalMap){
+    //occupancyMap = globalMap;
+	
     // search space information
     auto si(std::make_shared<ompl::base::SpaceInformation>(space));
     // define state checking callback
@@ -203,4 +225,3 @@ void Planner2D::configure(void){
 }
 
 } /* namespace */
-

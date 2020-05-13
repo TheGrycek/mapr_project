@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<launch>
+
+  <!-- rosbag elevation map -->
+  <node pkg="rosbag" type="play" name="player" output="screen" args="--clock $(find mapr_project)/maps/terrain_map.bag"/>
+
+  <!-- RViz -->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find mapr_project)/rviz/elevation_map.rviz" />
+
+  <!-- ompl-based motion planning node -->
+  <node pkg="mapr_project" name="mapr_project_node" type="mapr_project_node" output="screen" />
+    
+
+</launch>

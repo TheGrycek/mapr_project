@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(MAPR_elevation_map_project)
+project(mapr_project)
 
 set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
 
@@ -74,31 +74,31 @@ include_directories(
 )
 
 ## Declare a cpp library
-file(GLOB ompl_example_2d_sources
-    src/ompl_example_2d.cpp
+file(GLOB mapr_project_sources
+    src/mapr_project.cpp
 )
 
-file(GLOB ompl_example_2d_headers
-    include/ompl_example_2d/*.hpp
+file(GLOB mapr_project_headers
+    include/mapr_project/*.hpp
 )
 
-add_library(${PROJECT_NAME}_library STATIC ${ompl_example_2d_sources} ${ompl_example_2d_headers}
+add_library(${PROJECT_NAME}_library STATIC ${mapr_project_sources} ${mapr_project_headers}
 )
 
 target_link_libraries(${PROJECT_NAME}_library
    ${catkin_LIBRARIES}
 )
  
-# add_dependencies(${PROJECT_NAME}_library ompl_example_2d_generate_messages_cpp ${catkin_EXPORTED_TARGETS})
+# add_dependencies(${PROJECT_NAME}_library mapr_project_generate_messages_cpp ${catkin_EXPORTED_TARGETS})
 
 ## Declare a cpp executable
 add_executable(
   ${PROJECT_NAME}_node
-  src/ompl_example_2d_node.cpp
+  src/mapr_project_node.cpp
 )
 
 add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-# add_dependencies(${PROJECT_NAME} ompl_example_2d_generate_messages_cpp ${catkin_EXPORTED_TARGETS})
+# add_dependencies(${PROJECT_NAME} mapr_project_generate_messages_cpp ${catkin_EXPORTED_TARGETS})
 target_link_libraries(${PROJECT_NAME}_node
    ${PROJECT_NAME}_library
   ${catkin_LIBRARIES}
@@ -114,7 +114,7 @@ target_link_libraries(${PROJECT_NAME}_node
 # )
 
 # add_dependencies(${PROJECT_NAME}_trajectory ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-add_dependencies(${PROJECT_NAME}_node ompl_example_2d_generate_messages_cpp ${catkin_EXPORTED_TARGETS})
+add_dependencies(${PROJECT_NAME}_node mapr_project_generate_messages_cpp ${catkin_EXPORTED_TARGETS})
 
 
 #############

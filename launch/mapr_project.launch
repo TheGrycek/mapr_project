@@ -3,10 +3,10 @@
 <launch>
 
   <!-- rosbag elevation map -->
-  <node pkg="rosbag" type="play" name="player" output="screen" args="--clock $(find MAPR_elevation_map_project)/maps/terrain_map.bag"/>
+  <node pkg="rosbag" type="play" name="player" output="screen" args="--clock $(find mapr_project)/maps/terrain_map.bag"/>
 
   <!-- RViz -->
-  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find MAPR_elevation_map_project)/rviz/elevation_map.rviz" />
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find mapr_project)/rviz/elevation_map.rviz" />
 
   <!-- ompl-based motion planning node -->
   <!--<node pkg="ompl_example_2d" name="ompl_example_2d_node" type="ompl_example_2d_node" output="screen" />-->

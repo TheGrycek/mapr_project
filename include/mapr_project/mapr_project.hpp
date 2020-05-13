@@ -1,9 +1,9 @@
 /*
- * ompl_example_2d.hpp
+ * mapr_project.hpp
  *
- *  Created on: April 6, 2020
- *      Author: Dominik Belter
- *	 Institute: Instute of Robotics and Machine Intelligence, Poznan University of Technology
+ *  Created on: May 13, 2020
+ *      Author: Kamil Miedzinski Mateusz Grycmacher
+ *	 Institute: Instute of Home, Poznan University of Technology
  */
 
 #pragma once
@@ -17,6 +17,7 @@
 #include <geometry_msgs/PoseStamped.h>
 #include <nav_msgs/Path.h>
 #include <nav_msgs/OccupancyGrid.h>
+#include <grid_map_msgs/GridMap.h>
 
 #include <moveit/ompl_interface/ompl_interface.h>
 #include <ompl/geometric/planners/rrt/RRTConnect.h>
@@ -33,7 +34,7 @@
 #include <fstream>
 #include <iostream>
 
-namespace ompl_example_2d {
+namespace mapr_project {
 
 /*!
  * 2D planner example class
@@ -56,7 +57,8 @@ public:
     /*!
    * plan path
    */
-    nav_msgs::Path planPath(const nav_msgs::OccupancyGrid& globalMap);
+    nav_msgs::Path planPath(const grid_map_msgs::GridMap& globalMap);
+   // nav_msgs::Path planPath(const nav_msgs::OccupancyGrid& globalMap);
 
 private:
     /// node handle

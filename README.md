@@ -1,4 +1,4 @@
-# MAPR_elevation_map_project
+# mapr_project
 
 # Dependencies:
 
@@ -20,7 +20,7 @@ $ git clone https://github.com/ANYbotics/kindr.git
 
 $ git clone https://github.com/ANYbotics/kindr_ros.git
 
-$ git clone https://github.com/Kamilkim/MAPR_elevation_map_project.git
+$ git clone https://github.com/Kamilkim/mapr_project.git
 
 $ cd ~/catkin_ws/
 
@@ -28,7 +28,7 @@ $ catkin_make_isolated
 
 # Run example
 
-$ roslaunch MAPR_elevation_map_project MAPR_elevation_map_project.launch
+$ roslaunch mapr_project mapr_project.launch
 
 # Tasks
 
@@ -36,8 +36,8 @@ $ roslaunch MAPR_elevation_map_project MAPR_elevation_map_project.launch
 
 2. in the new terminal run script 
 
-    $ rosrun MAPR_elevation_map_project elevMapExample.py
+    $ rosrun mapr_project elevMapExample.py
 
 3. add topic "reflected_map" in rviz
 
-![Mapa](https://github.com/Kamilkim/MAPR_elevation_map_project/blob/master/doc/Elevation_map.JPG)
+![Mapa](https://github.com/Kamilkim/mapr_project/blob/master/doc/Elevation_map.JPG)
