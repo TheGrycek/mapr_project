@@ -26,6 +26,8 @@ $ cd ~/catkin_ws/
 
 $ catkin_make_isolated
 
+$ source devel_isolated/setup.bash
+
 # Run example
 
 $ roslaunch mapr_project mapr_project.launch
