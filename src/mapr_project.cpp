@@ -27,12 +27,16 @@ namespace og = ompl::geometric;
 namespace mapr_project {
 
 grid_map_msgs::GridMap gridMap;
+double point_start_x = 0.0;
+double point_start_y = 0.0;
+double point_end_x = 0.0;
+double point_end_y = 0.0;
 
 Planner2D::Planner2D(ros::NodeHandle& _nodeHandle)
     : nodeHandle(_nodeHandle)
 {
     ROS_INFO("Controlling UR node started.");
-    configure();
+    configure(point_start_x, point_start_y, point_end_x, point_end_y);
 }
 
 Planner2D::~Planner2D()
@@ -56,11 +60,6 @@ bool isStateValid(const ob::State *state){
              return false;
          }
      }
-
-    //! Comment this part of the code if you'd like to use occupancy grid
-
-    //! Your code goes below
-    // Hint: uncoment the code below:
 
      //int row, col;
      //float originX = occupancyMap.info.origin.position.x;
@@ -113,6 +112,15 @@ bool isStateValid(const ob::State *state){
     return true;
 }
 
+
+void Planner2D::returnPoints(std_msgs::UInt8 pStartX, std_msgs::UInt8 pStartY,
+                             std_msgs::UInt8 pEndX, std_msgs::UInt8 pEndY){
+    point_start_x = double(pStartX.data) * 0.1 - 6.0;
+    point_start_y = double(pStartY.data) * 0.1 - 2.0;
+    point_end_x = double(pEndX.data) * 0.1 - 6.0;
+    point_end_y = double(pEndY.data) * 0.1 - 2.0;
+}
+
 /// extract path
 nav_msgs::Path Planner2D::extractPath(ob::ProblemDefinition* pdef){
     nav_msgs::Path plannedPath;
@@ -150,14 +158,11 @@ nav_msgs::Path Planner2D::extractPath(ob::ProblemDefinition* pdef){
     return plannedPath;
 }
 
-/*!
- * plan path
- */
+
 nav_msgs::Path Planner2D::planPath(const grid_map_msgs::GridMap& globalMap){
+
+    configure(point_start_x, point_start_y, point_end_x, point_end_y);
     gridMap = globalMap;
-	
-//nav_msgs::Path Planner2D::planPath(const nav_msgs::OccupancyGrid& globalMap){
-    //occupancyMap = globalMap;
 	
     // search space information
     auto si(std::make_shared<ompl::base::SpaceInformation>(space));
@@ -189,7 +194,8 @@ nav_msgs::Path Planner2D::planPath(const grid_map_msgs::GridMap& globalMap){
 }
 
 /// configure planner
-void Planner2D::configure(void){
+void Planner2D::configure(double point_start_x, double point_start_y, double point_end_x, double point_end_y){
+
     dim = 2;//2D problem
     maxStepLength = 0.1;// max step length
 
@@ -216,14 +222,14 @@ void Planner2D::configure(void){
 
     // define the start position
     start.reset(new ob::ScopedState<>(space));
-    (*start.get())[0]=0.0;
-    (*start.get())[1]=0.0;
+    (*start.get())[0]= point_start_x;
+    (*start.get())[1]= point_start_y;
 //    start.get()->random();
 
     // define the goal position
     goal.reset(new ob::ScopedState<>(space));
-    (*goal.get())[0]=-5.0;
-    (*goal.get())[1]=-1.0;
+    (*goal.get())[0]= point_end_x;
+    (*goal.get())[1]= point_end_y;
 //    goal.get()->random();
 }
 
