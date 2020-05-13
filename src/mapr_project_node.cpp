@@ -14,12 +14,16 @@
 #include <nav_msgs/OccupancyGrid.h>
 #include <grid_map_msgs/GridMap.h>
 #include <grid_map_core/GridMap.hpp>
-
+#include <std_msgs/UInt8.h>
 
 using namespace std;
 using namespace ros;
 
 grid_map_msgs::GridMap globalMap;
+std_msgs::UInt8 start_x;
+std_msgs::UInt8 start_y;
+std_msgs::UInt8 end_x;
+std_msgs::UInt8 end_y;
 
 //nav_msgs::OccupancyGrid globalMap;
 
@@ -35,6 +39,35 @@ void mapCallback(const grid_map_msgs::GridMap& message)
   globalMap = message;
 }
 
+void pointCallback_startX(const std_msgs::UInt8& startX)
+{
+  ROS_INFO("Planner received start point X");
+          start_x = startX;
+//  std::cout << "Start X:" << double(start_x.data) << "\n";
+}
+
+void pointCallback_startY(const std_msgs::UInt8& startY)
+{
+  ROS_INFO("Planner received start point Y");
+          start_y = startY;
+// std::cout << "Start Y:" << double(start_y.data) << "\n";
+
+}
+
+void pointCallback_endX(const std_msgs::UInt8& endX)
+{
+  ROS_INFO("Planner received end point X");
+          end_x = endX;
+//          std::cout << "End X:" << double(end_x.data) << "\n";
+
+}
+
+void pointCallback_endY(const std_msgs::UInt8& endY)
+{
+  ROS_INFO("Planner received end point Y");
+          end_y= endY;
+//          std::cout << "End Y:" << double(end_y.data) << "\n";
+}
 
 int main(int argc, char** argv)
 {
@@ -51,11 +84,16 @@ int main(int argc, char** argv)
     // planned path publisher
     ros::Publisher path_pub = nodeHandle.advertise<nav_msgs::Path>("planned_path", 1000);
 
-    // occupancy map subscriber
-    ros::Subscriber map_sub = nodeHandle.subscribe("/map_copy", 10, mapCallback);
+    // elevation map subscriber
+    ros::Subscriber map_sub = nodeHandle.subscribe("/map_copy", 10, mapCallback);  
+    ros::Subscriber pstart_x = nodeHandle.subscribe("/start_point_x", 10, pointCallback_startX);
+    ros::Subscriber pstart_y = nodeHandle.subscribe("/start_point_y", 10, pointCallback_startY);
+    ros::Subscriber pend_x = nodeHandle.subscribe("/end_point_x", 10, pointCallback_endX);
+    ros::Subscriber pend_y = nodeHandle.subscribe("/end_point_y", 10, pointCallback_endY);
 
     while (ros::ok()){
         nav_msgs::Path plannedPath;
+        planner_.returnPoints(start_x, start_y, end_x, end_y);
         plannedPath = planner_.planPath(globalMap);
 
         // publish the planned path
