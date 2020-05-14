@@ -9,7 +9,8 @@ from std_msgs.msg import UInt8
 from std_msgs.msg import Header
 from geometry_msgs.msg import Point
 from geometry_msgs.msg import PointStamped
-from nav_msgs.msg import Path
+from geometry_msgs.msg import PoseStamped
+from nav_msgs.msg import Path as Path_map
 from pathlib import Path
 
 map_cpy = msg.GridMap()
@@ -21,6 +22,7 @@ end_y = np.uint8(0)
 end_z = np.float64(0)
 data_tmp = []
 stride0, stride1, cols, rows, offset = 0, 0, 0, 0, 0
+old_image = np.zeros(3600)
 
 cwd = str(Path(__file__).resolve().parent.parent)
 image_dir = cwd + '/images'
@@ -54,37 +56,13 @@ def callback_map(elev_map):
    map_cpy.outer_start_index = elev_map.outer_start_index
    map_cpy.inner_start_index = elev_map.inner_start_index
 
-   ###################################################
-
-   new_image = np.array(data_tmp)
-   max = np.amax(data_tmp)
-   min = np.amin(data_tmp)
-   image_name = 'map%u.png' % img_number
-   img_number = img_number + 1
-
-   for pix in range(new_image.size):
-      # map pixels value range 5 - 255
-       new_image[pix] = ((new_image[pix] - min) / (max - min)) * (255 - 5) + 5
-       new_image[pix] = np.uint8(round(new_image[pix]))
-
-   new_image[offset + start_y + stride1 * start_x + 0] = 0
-   new_image[offset + end_y + stride1 * end_x + 0] = 0
-   new_image = new_image.reshape(rows, cols)
-   os.chdir(image_dir)
-   cv.imwrite(image_name, new_image)
-
 def callback_path(path):
-   pass
-   global img_number, image_dir, stride0, stride1, cols, rows, offset, data_tmp
-
-   #TODO Zamienic wiadomosc typu path na punkty na mapie wysokosciowej
-   # - zamienic wartosc pikseli odpowiadajacych punktom na 0
+   global img_number, image_dir, stride0, stride1, cols, rows, offset, data_tmp, old_image
 
    new_image = np.array(list(data_tmp))
    max = np.amax(data_tmp)
    min = np.amin(data_tmp)
    image_name = 'map%u.png' % img_number
-   img_number = img_number + 1
 
    for pix in range(new_image.size):
       # map pixels value range 5 - 255
@@ -93,23 +71,20 @@ def callback_path(path):
 
    new_image[offset + start_y + stride1 * start_x + 0] = 0
    new_image[offset + end_y + stride1 * end_x + 0] = 0
-   new_image = new_image.reshape(rows, cols)
+
+   for pos in path.poses:
+      posX = int(round(((float)(pos.pose.position.x) + 6) / 0.1))
+      posY = int(round(((float)(pos.pose.position.y) + 2) / 0.1))
+      old_image[offset + posY + stride1 * posX + 0] = 0
+
+
+   img_write = old_image.reshape(rows, cols)
    os.chdir(image_dir)
-   cv.imwrite(image_name, new_image)
+   if img_number != 0:
+      cv.imwrite(image_name, img_write)
 
-
-# def createPoints(start_x, start_y, start_z, end_x, end_y, end_z):
-#    header = Header(stamp=rospy.Time.now(), frame_id="odom")
-#    resolution = map_cpy.info.resolution
-#    x_off = map_cpy.info.pose.position.x
-#    y_off = map_cpy.info.pose.position.y
-#    z_off = map_cpy.info.pose.position.z
-#    start_point = Point(start_x * resolution + x_off, start_y * resolution + y_off, start_z + z_off)
-#    end_point = Point(end_x * resolution + x_off, end_y * resolution + y_off, end_z + z_off)
-#    start_point_stamped = PointStamped(header=header, point=start_point)
-#    end_point_stamped = PointStamped(header=header, point=end_point)
-#
-#    return(start_point_stamped, end_point_stamped)
+   old_image = new_image
+   img_number += 1
 
 def mapListener():
    global start_x, start_y, end_x, end_y, start_z, end_z
@@ -121,15 +96,15 @@ def mapListener():
    pub_end_x = rospy.Publisher('/end_point_x', UInt8, queue_size=10)
    pub_start_y = rospy.Publisher('/start_point_y', UInt8, queue_size=10)
    pub_end_y = rospy.Publisher('/end_point_y', UInt8, queue_size=10)
-   # rospy.Subscriber("/path", Path, callback_path)
+   rospy.Subscriber("/planned_path", Path_map, callback_path)
 
-   rate = rospy.Rate(1)
+   rate = rospy.Rate(0.5)
 
    while not rospy.is_shutdown():
-      start_str = '%u, %u, %f' % (start_x, start_y, start_z)
-      end_str = '%u, %u, %f' % (end_x, end_y, end_z)
-      rospy.loginfo(start_str)
-      rospy.loginfo(end_str)
+      # start_str = '%u, %u, %f' % (start_x, start_y, start_z)
+      # end_str = '%u, %u, %f' % (end_x, end_y, end_z)
+      # rospy.loginfo(start_str)
+      # rospy.loginfo(end_str)
 
       pub_start_x.publish(start_x)
       pub_start_y.publish(start_y)
