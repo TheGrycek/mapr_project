@@ -79,10 +79,10 @@ int main(int argc, char** argv)
     mapr_project::Planner2D planner_(nodeHandle);
 
     // setup the ROS loop rate
-    ros::Rate loop_rate(1);
+    ros::Rate loop_rate(0.5);
 
     // planned path publisher
-    ros::Publisher path_pub = nodeHandle.advertise<nav_msgs::Path>("planned_path", 1000);
+    ros::Publisher path_pub = nodeHandle.advertise<nav_msgs::Path>("/planned_path", 1000);
 
     // elevation map subscriber
     ros::Subscriber map_sub = nodeHandle.subscribe("/map_copy", 10, mapCallback);  
