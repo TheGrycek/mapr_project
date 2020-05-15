@@ -53,7 +53,7 @@ bool isStateValid(const ob::State *state){
     const auto *coordY =
             state->as<ob::CompoundState>()->as<ob::RealVectorStateSpace::StateType>(1);
 
-    ompl::base::Cost cost = ;
+    // ompl::base::Cost cost = ;
 
     //     define the obstacle
     // if (coordX->values[0]<-3.1&&coordX->values[0]>-3.2){
@@ -171,7 +171,6 @@ nav_msgs::Path Planner2D::planPath(const grid_map_msgs::GridMap& globalMap){
     // search space information
     auto si(std::make_shared<ompl::base::SpaceInformation>(space));
     // define state checking callback
-    si->cost;
     si->setStateValidityChecker(isStateValid);
     // set State Validity Checking Resolution (avoid going through the walls)
     si->setStateValidityCheckingResolution(0.001);
