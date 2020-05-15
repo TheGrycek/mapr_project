@@ -20,8 +20,9 @@
 #include <grid_map_msgs/GridMap.h>
 #include <std_msgs/UInt8.h>
 #include <moveit/ompl_interface/ompl_interface.h>
-#include <ompl/geometric/planners/rrt/RRTConnect.h>
+#include <ompl/geometric/planners/rrt/RRTstar.h>
 #include <ompl/base/spaces/RealVectorStateSpace.h>
+#include <ompl/base/Cost.h>
 
 // Boost
 #include <boost/thread.hpp>

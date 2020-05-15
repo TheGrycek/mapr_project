@@ -53,7 +53,8 @@ bool isStateValid(const ob::State *state){
     const auto *coordY =
             state->as<ob::CompoundState>()->as<ob::RealVectorStateSpace::StateType>(1);
 
-    //! Comment this part of the code if you'd like to use occupancy grid
+    ompl::base::Cost cost = ;
+
     //     define the obstacle
     // if (coordX->values[0]<-3.1&&coordX->values[0]>-3.2){
     //    if (coordY->values[0]<3.0&&coordY->values[0]>-2.0){
@@ -79,7 +80,7 @@ bool isStateValid(const ob::State *state){
 	
      }*/
 
-    //! Your code goes below
+
     // Hint: uncoment the code below:
 	/*
     std::cout << "gridMap.info.pose.position.x " << gridMap.info.pose.position.x << "\n";
@@ -99,7 +100,7 @@ bool isStateValid(const ob::State *state){
 	   std::cout << "gridMap.data[0].data[1000] " << gridMap.data[0].data[1000] << "\n";
 	}
 	*/
-    //! Your code goes above
+
     return true;
 }
 
@@ -170,6 +171,7 @@ nav_msgs::Path Planner2D::planPath(const grid_map_msgs::GridMap& globalMap){
     // search space information
     auto si(std::make_shared<ompl::base::SpaceInformation>(space));
     // define state checking callback
+    si->cost;
     si->setStateValidityChecker(isStateValid);
     // set State Validity Checking Resolution (avoid going through the walls)
     si->setStateValidityCheckingResolution(0.001);
@@ -179,8 +181,9 @@ nav_msgs::Path Planner2D::planPath(const grid_map_msgs::GridMap& globalMap){
     pdef->setStartAndGoalStates(*start.get(), *goal.get());
 
     // create planner
-    auto planner(std::make_shared<og::RRTConnect>(si));
+    auto planner(std::make_shared<og::RRTstar>(si));
     // configure the planner
+    //planner->setDelayCC(true);
     planner->setRange(maxStepLength);// max step length
     planner->setProblemDefinition(pdef);
     planner->setup();
