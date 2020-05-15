@@ -71,10 +71,16 @@ def callback_path(path):
 
    new_image[offset + start_y + stride1 * start_x + 0] = 0
    new_image[offset + end_y + stride1 * end_x + 0] = 0
-
+   print("Start point:")
+   print(start_x, start_y)
+   print("End point:")
+   print(end_x, end_y)
+   print("Path points:")
    for pos in path.poses:
        posX = int(round(((float)(pos.pose.position.x) + 6) / 0.1))
        posY = int(round(((float)(pos.pose.position.y) + 6) / 0.1))
+
+       print(posX, posY)
        old_image[offset + posY + stride1 * posX + 0] = 0
 
 

@@ -110,7 +110,6 @@ void Planner2D::returnPoints(std_msgs::UInt8 pStartX, std_msgs::UInt8 pStartY,
     point_start_y = double(pStartY.data) * 0.1 - 6.0;
     point_end_x = double(pEndX.data) * 0.1 - 6.0;
     point_end_y = double(pEndY.data) * 0.1 - 6.0;
-.0;
 }
 
 /// extract path
