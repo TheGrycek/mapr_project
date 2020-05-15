@@ -73,9 +73,9 @@ def callback_path(path):
    new_image[offset + end_y + stride1 * end_x + 0] = 0
 
    for pos in path.poses:
-      posX = int(round(((float)(pos.pose.position.x) + 6) / 0.1))
-      posY = int(round(((float)(pos.pose.position.y) + 2) / 0.1))
-      old_image[offset + posY + stride1 * posX + 0] = 0
+       posX = int(round(((float)(pos.pose.position.x) + 6) / 0.1))
+       posY = int(round(((float)(pos.pose.position.y) + 6) / 0.1))
+       old_image[offset + posY + stride1 * posX + 0] = 0
 
 
    img_write = old_image.reshape(rows, cols)

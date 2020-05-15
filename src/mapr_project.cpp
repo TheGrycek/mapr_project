@@ -55,38 +55,29 @@ bool isStateValid(const ob::State *state){
 
     //! Comment this part of the code if you'd like to use occupancy grid
     //     define the obstacle
-     if (coordX->values[0]<-3.1&&coordX->values[0]>-3.2){
-        if (coordY->values[0]<3.0&&coordY->values[0]>-2.0){
-             return false;
-         }
-     }
+    // if (coordX->values[0]<-3.1&&coordX->values[0]>-3.2){
+    //    if (coordY->values[0]<3.0&&coordY->values[0]>-2.0){
+    //         return false;
+    //     }
+    // }
 
-     //int row, col;
-     //float originX = occupancyMap.info.origin.position.x;
-     //float originY = occupancyMap.info.origin.position.y;
-     //float resolution = occupancyMap.info.resolution;
+     float originX = gridMap.info.pose.position.x;
+     float originY = gridMap.info.pose.position.y;
+     float resolution = gridMap.info.resolution;
 
-       // col = ((coordX->values[0])-originX)/resolution;
+     int col = (coordX->values[0])*(-1)/resolution;
+     int row = (coordY->values[0])*(-1)/resolution;
+     int stride  = 60; 
 
-       //row = ((coordY->values[0])-originY)/resolution;
-
-
-/*    if (occupancyMap.data.size())
+     /*if (gridMap.info.length_x)
      {
-         for (int i = -5; i < 5; i++)
-                {
-                    for (int j = -5; j < 5; j++)
-                    {
-                        if (int(occupancyMap.data[(col+i) + (row+j) * occupancyMap.info.width])>0)
-                        {
-                             return false;
-                        }
-                    }
-                 }
-
-     }
-*/
-    
+ 	//std::cout << "gridMap.data[0].data[col + row * stride] " << gridMap.data[0].data[col + row * stride] << "\n";
+        if (gridMap.data[0].data[col + row * stride] > 3)
+      	{
+            return false;
+       	}
+	
+     }*/
 
     //! Your code goes below
     // Hint: uncoment the code below:
@@ -116,15 +107,16 @@ bool isStateValid(const ob::State *state){
 void Planner2D::returnPoints(std_msgs::UInt8 pStartX, std_msgs::UInt8 pStartY,
                              std_msgs::UInt8 pEndX, std_msgs::UInt8 pEndY){
     point_start_x = double(pStartX.data) * 0.1 - 6.0;
-    point_start_y = double(pStartY.data) * 0.1 - 2.0;
+    point_start_y = double(pStartY.data) * 0.1 - 6.0;
     point_end_x = double(pEndX.data) * 0.1 - 6.0;
-    point_end_y = double(pEndY.data) * 0.1 - 2.0;
+    point_end_y = double(pEndY.data) * 0.1 - 6.0;
+.0;
 }
 
 /// extract path
 nav_msgs::Path Planner2D::extractPath(ob::ProblemDefinition* pdef){
     nav_msgs::Path plannedPath;
-    plannedPath.header.frame_id = "/odom";
+    plannedPath.header.frame_id = "/map";
     // get the obtained path
     ob::PathPtr path = pdef->getSolutionPath();
     // print the path to screen
@@ -141,16 +133,28 @@ nav_msgs::Path Planner2D::extractPath(ob::ProblemDefinition* pdef){
         // get y coord of the robot
         const auto *coordY =
                 state->as<ob::CompoundState>()->as<ob::RealVectorStateSpace::StateType>(1);
+
+	// potrzebne do obliczania wspl. Z sciezki
+	int col = ((coordX->values[0]))/(-0.1);
+     	int row = ((coordY->values[0]))/(-0.1);
+
         // fill in the ROS PoseStamped structure...
         geometry_msgs::PoseStamped poseMsg;
         poseMsg.pose.position.x = coordX->values[0];
         poseMsg.pose.position.y = coordY->values[0];
-        poseMsg.pose.position.z = 0.01;
+        if (gridMap.info.length_x)
+    	{
+		poseMsg.pose.position.z = gridMap.data[0].data[col + row * 60] +0.1; 
+ 	}
+	else
+	{
+		poseMsg.pose.position.z = 0;
+	} 
         poseMsg.pose.orientation.w = 1.0;
         poseMsg.pose.orientation.x = 0.0;
         poseMsg.pose.orientation.y = 0.0;
         poseMsg.pose.orientation.z = 0.0;
-        poseMsg.header.frame_id = "/odom";
+        poseMsg.header.frame_id = "/map";
         poseMsg.header.stamp = ros::Time::now();
         // ... and add the pose to the path
         plannedPath.poses.push_back(poseMsg);
@@ -206,8 +210,8 @@ void Planner2D::configure(double point_start_x, double point_start_y, double poi
 
     // create bounds for the y axis
     coordYBound.reset(new ob::RealVectorBounds(dim-1));
-    coordYBound->setLow(-2.0);
-    coordYBound->setHigh(4.0);
+    coordYBound->setLow(-6.0);
+    coordYBound->setHigh(0.0);
 
     // construct the state space we are planning in
     auto coordX(std::make_shared<ob::RealVectorStateSpace>(dim-1));

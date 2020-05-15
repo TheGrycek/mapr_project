@@ -7,13 +7,12 @@ from grid_map_msgs import msg # import occupancy grid data
 map_cpy = msg.GridMap()
 
 data_tmp = []
-variance_tmp = []
 noise = []
 sinusoid = []
 first = True
 
 def terrain(elev_map):
-   global first, data_tmp, noise, variance_tmp
+   global first, data_tmp, noise
 
    stride0 = elev_map.data[0].layout.dim[0].stride
    stride1 = elev_map.data[0].layout.dim[1].stride
@@ -24,14 +23,19 @@ def terrain(elev_map):
    offset = elev_map.data[0].layout.data_offset
    map_cpy.data = elev_map.data
 
+   print("elev_map.data[0].layout.dim[0].stride",elev_map.data[0].layout.dim[0].stride)
+   print("elev_map.data[0].layout.dim[1].stride",elev_map.data[0].layout.dim[1].stride)
+   print("elev_map.data[0].layout.dim[0].size",elev_map.data[0].layout.dim[0].size)
+   print("elev_map.data[0].layout.dim[1].size",elev_map.data[0].layout.dim[1].size)
+   print("elev_map.data[0].layout.data_offset",elev_map.data[0].layout.data_offset)
+   print("elev_map.outer_start_index",elev_map.outer_start_index)
+   print("elev_map.inner_start_index",elev_map.inner_start_index)
+
+
    data_tmp = list(map_cpy.data[0].data)
-   variance_tmp = list(map_cpy.data[1].data)
 
    for i in range(len(data_tmp)):
       data_tmp[i] = np.float32(1)
-
-   for i in range(len(variance_tmp)):
-      variance_tmp[i] = np.float32(0.00009999)
 
    data_tmp2 = data_tmp
 
@@ -85,28 +89,28 @@ def terrain(elev_map):
 
       first = False
 
-   return(data_tmp, variance_tmp)
+   return data_tmp
 
 
 def callback(elev_map):
-   global first, data_tmp, variance_tmp
+   global first, data_tmp
 
    map_cpy.info = elev_map.info
    map_cpy.layers = elev_map.layers
    map_cpy.basic_layers = elev_map.basic_layers
    map_cpy.outer_start_index = elev_map.outer_start_index
-   map_cpy.inner_start_index = elev_map.inner_start_index
+   map_cpy.inner_start_index = elev_map.inner_start_index 
 
    if first:
-      data_tmp, variance_tmp = terrain(elev_map)
+      data_tmp = terrain(elev_map)
 
-   map_cpy.data[1].data = tuple(variance_tmp)
+   
    map_cpy.data[0].data = tuple(data_tmp)
 
 def mapListener():
 
    rospy.init_node('map_listener', anonymous=True)
-   rospy.Subscriber("/elevation_mapping/elevation_map_raw", msg.GridMap, callback)
+   rospy.Subscriber("/grid_map_simple_demo/grid_map", msg.GridMap, callback)
    pub = rospy.Publisher('/map_copy', msg.GridMap, queue_size=10)
    rate = rospy.Rate(1)  # 1hz
 
