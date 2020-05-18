@@ -27,15 +27,121 @@ namespace og = ompl::geometric;
 namespace mapr_project {
 
 grid_map_msgs::GridMap gridMap;
-double point_start_x = 0.0;
-double point_start_y = 0.0;
-double point_end_x = 0.0;
-double point_end_y = 0.0;
+
+double point_start_x = -0.5;
+double point_start_y = -0.5;
+double point_end_x = -5.0;
+double point_end_y = -5.8;
+
+class ValidityChecker : public ob::StateValidityChecker
+{
+public:
+    ValidityChecker(const ob::SpaceInformationPtr& si) :
+        ob::StateValidityChecker(si) {}
+ 
+    bool isValid(const ob::State* state) const
+    {
+        return this->clearance(state);
+    }
+
+    double clearance(const ob::State* state) const
+    {
+        const ob::RealVectorStateSpace::StateType* state2D =
+            state->as<ob::RealVectorStateSpace::StateType>();
+        // Extract the robot's (x,y) position from its state
+        double x = state2D->values[0];
+        double y = state2D->values[0];
+        int col = (x)/(-0.1);
+     	int row = (y)/(-0.1);
+
+	float resolution = gridMap.info.resolution;
+
+  	float point_start_z = 0;
+	float point_end_z = 0;
+
+  	if(gridMap.info.length_x>0)  // Mapa wysokosci subskyrbowana
+	{
+		// Wysokosc z jakiej startujemy i do jakiej zmierzamy
+		point_start_z = gridMap.data[0].data[(point_start_x/resolution*(-1)) + (point_start_y/resolution*(-1)) * 60];
+		point_end_z = gridMap.data[0].data[(point_end_x/resolution*(-1)) + (point_end_y/resolution*(-1)) * 60];
+		//std::cout << "point_start_z: " << point_start_z << " point_end_z: " << point_end_z << "\n";
+
+		// Idziemy z gorki
+		if(point_start_z > point_end_z) 	
+		{
+			if ((gridMap.data[0].data[col + row * 60]<point_start_z) && (gridMap.data[0].data[col + row * 60]>point_end_z))
+	    		{
+				
+				return gridMap.data[0].data[col + row * 60]; 
+	 		} 
+		 	else
+			{
+				return gridMap.data[0].data[col + row * 60]*gridMap.data[0].data[col + row * 60]; 
+			}
+		}
+		else // Idziemy pod gore
+		{
+			if ((gridMap.data[0].data[col + row * 60]>point_start_z) && (gridMap.data[0].data[col + row * 60]<point_end_z))
+	    		{
+				return gridMap.data[0].data[col + row * 60]; 
+	 		} 
+		 	else
+			{
+				return gridMap.data[0].data[col + row * 60]*gridMap.data[0].data[col + row * 60]; 
+			}
+
+		}	
+	}
+	else // Brak mapy
+	{
+		return 1;
+	}
+    }
+};
+
+class ClearanceObjective : public ob::StateCostIntegralObjective
+{
+public:
+    ClearanceObjective(const ob::SpaceInformationPtr& si) :
+        ob::StateCostIntegralObjective(si, true)
+    {
+    }
+    ob::Cost stateCost(const ob::State* s) const
+    {
+        return ob::Cost(si_->getStateValidityChecker()->clearance(s));
+    }
+};
+
+//Optimization - getPathLengthObjective
+ ob::OptimizationObjectivePtr getPathLengthObjective(const ob::SpaceInformationPtr& si)
+ {
+     return ob::OptimizationObjectivePtr(new ob::PathLengthOptimizationObjective(si));
+ }
+
+//Optimization - getClearanceObjective
+ob::OptimizationObjectivePtr getClearanceObjective(const ob::SpaceInformationPtr& si)
+{
+    return std::make_shared<ClearanceObjective>(si);
+
+}
+
+//Optimization - getBalancedObjective
+ob::OptimizationObjectivePtr getBalancedObjective(const ob::SpaceInformationPtr& si)
+{
+    ob::OptimizationObjectivePtr lengthObj(new ob::PathLengthOptimizationObjective(si));
+    ob::OptimizationObjectivePtr clearObj(new ClearanceObjective(si));
+    ob::MultiOptimizationObjective* opt = new ob::MultiOptimizationObjective(si);
+    opt->addObjective(lengthObj, 1.0);
+    opt->addObjective(clearObj, 10.0);
+    return ob::OptimizationObjectivePtr(opt);
+}
+
+
 
 Planner2D::Planner2D(ros::NodeHandle& _nodeHandle)
     : nodeHandle(_nodeHandle)
 {
-    ROS_INFO("Controlling UR node started.");
+    ROS_INFO("Planner node started.");
     configure(point_start_x, point_start_y, point_end_x, point_end_y);
 }
 
@@ -43,66 +149,6 @@ Planner2D::~Planner2D()
 {
 }
 
-/// check if the current state is valid
-bool isStateValid(const ob::State *state){
-    // get x coord of the robot
-    int test = 0;
-    const auto *coordX =
-            state->as<ob::CompoundState>()->as<ob::RealVectorStateSpace::StateType>(0);
-    // get y coord of the robot
-    const auto *coordY =
-            state->as<ob::CompoundState>()->as<ob::RealVectorStateSpace::StateType>(1);
-
-    // ompl::base::Cost cost = ;
-
-    //     define the obstacle
-    // if (coordX->values[0]<-3.1&&coordX->values[0]>-3.2){
-    //    if (coordY->values[0]<3.0&&coordY->values[0]>-2.0){
-    //         return false;
-    //     }
-    // }
-
-     float originX = gridMap.info.pose.position.x;
-     float originY = gridMap.info.pose.position.y;
-     float resolution = gridMap.info.resolution;
-
-     int col = (coordX->values[0])*(-1)/resolution;
-     int row = (coordY->values[0])*(-1)/resolution;
-     int stride  = 60; 
-
-     /*if (gridMap.info.length_x)
-     {
- 	//std::cout << "gridMap.data[0].data[col + row * stride] " << gridMap.data[0].data[col + row * stride] << "\n";
-        if (gridMap.data[0].data[col + row * stride] > 3)
-      	{
-            return false;
-       	}
-	
-     }*/
-
-
-    // Hint: uncoment the code below:
-	/*
-    std::cout << "gridMap.info.pose.position.x " << gridMap.info.pose.position.x << "\n";
-    std::cout << "gridMap.info.pose.position.y " << gridMap.info.pose.position.y << "\n";
-    std::cout << "gridMap.info.pose.position.z " << gridMap.info.pose.position.z << "\n";
-    std::cout << "gridMap.info.resolution " << gridMap.info.resolution << "\n";
-    std::cout << "gridMap.info.length_x " << gridMap.info.length_x << "\n";
-    std::cout << "gridMap.info.length_y " << gridMap.info.length_y << "\n";
-	
-    if(gridMap.info.length_x )
-	{
-      	   std::cout << "gridMap.data[0].layout.dim[0].stride " << gridMap.data[0].layout.dim[0].stride << "\n";
-	   std::cout << "gridMap.data[0].layout.dim[1].stride " << gridMap.data[0].layout.dim[1].stride << "\n";
-	   std::cout << "gridMap.data[0].layout.dim[0].size " << gridMap.data[0].layout.dim[0].size << "\n";
-	   std::cout << "gridMap.data[0].layout.dim[1].size " << gridMap.data[0].layout.dim[1].size << "\n";
-	   std::cout << "gridMap.data[0].layout.data_offset " << gridMap.data[0].layout.data_offset << "\n";
-	   std::cout << "gridMap.data[0].data[1000] " << gridMap.data[0].data[1000] << "\n";
-	}
-	*/
-
-    return true;
-}
 
 
 void Planner2D::returnPoints(std_msgs::UInt8 pStartX, std_msgs::UInt8 pStartY,
@@ -115,7 +161,7 @@ void Planner2D::returnPoints(std_msgs::UInt8 pStartX, std_msgs::UInt8 pStartY,
 
 /// extract path
 nav_msgs::Path Planner2D::extractPath(ob::ProblemDefinition* pdef){
-    nav_msgs::Path plannedPath;
+   nav_msgs::Path plannedPath;
     plannedPath.header.frame_id = "/map";
     // get the obtained path
     ob::PathPtr path = pdef->getSolutionPath();
@@ -127,22 +173,21 @@ nav_msgs::Path Planner2D::extractPath(ob::ProblemDefinition* pdef){
     for(unsigned int i=0; i<path_->getStateCount(); ++i){
         // get state
         const ob::State* state = path_->getState(i);
-        // get x coord of the robot
-        const auto *coordX =
-                state->as<ob::CompoundState>()->as<ob::RealVectorStateSpace::StateType>(0);
-        // get y coord of the robot
-        const auto *coordY =
-                state->as<ob::CompoundState>()->as<ob::RealVectorStateSpace::StateType>(1);
 
+	const ob::RealVectorStateSpace::StateType* state2D = state->as<ob::RealVectorStateSpace::StateType>();
+
+        // Extract the robot's (x,y) position from its state
+        double x = state2D->values[0];
+        double y = state2D->values[1];
 	// potrzebne do obliczania wspl. Z sciezki
-	int col = ((coordX->values[0]))/(-0.1);
-     	int row = ((coordY->values[0]))/(-0.1);
+	int col = (x)/(-0.1);
+     	int row = (y)/(-0.1);
 
         // fill in the ROS PoseStamped structure...
         geometry_msgs::PoseStamped poseMsg;
-        poseMsg.pose.position.x = coordX->values[0];
-        poseMsg.pose.position.y = coordY->values[0];
-        if (gridMap.info.length_x)
+        poseMsg.pose.position.x = x;
+        poseMsg.pose.position.y = y;
+	if (gridMap.info.length_x)
     	{
 		poseMsg.pose.position.z = gridMap.data[0].data[col + row * 60] +0.1; 
  	}
@@ -165,77 +210,73 @@ nav_msgs::Path Planner2D::extractPath(ob::ProblemDefinition* pdef){
 
 nav_msgs::Path Planner2D::planPath(const grid_map_msgs::GridMap& globalMap){
 
-    configure(point_start_x, point_start_y, point_end_x, point_end_y);
-    gridMap = globalMap;
-	
-    // search space information
-    auto si(std::make_shared<ompl::base::SpaceInformation>(space));
-    // define state checking callback
-    si->setStateValidityChecker(isStateValid);
-    // set State Validity Checking Resolution (avoid going through the walls)
-    si->setStateValidityCheckingResolution(0.001);
+    	gridMap = globalMap;
+	configure(point_start_x, point_start_y, point_end_x, point_end_y);
 
-    // problem definition
-    auto pdef(std::make_shared<ob::ProblemDefinition>(si));
-    pdef->setStartAndGoalStates(*start.get(), *goal.get());
+    // Construct the robot state space in which we're planning. We're
+	// planning in [0,1]x[0,1], a subset of R^2.
+	ob::StateSpacePtr space(new ob::RealVectorStateSpace(2));
 
-    // create planner
-    auto planner(std::make_shared<og::RRTstar>(si));
-    // configure the planner
-    //planner->setDelayCC(true);
-    planner->setRange(maxStepLength);// max step length
-    planner->setProblemDefinition(pdef);
-    planner->setup();
+	// Set the bounds of space to be in [0,1].
+	space->as<ob::RealVectorStateSpace>()->setBounds(-6.0, 0.0);
 
-    // solve motion planning problem
-    ob::PlannerStatus solved = planner->ob::Planner::solve(1.0);
+	// Construct a space information instance for this state space
+	ob::SpaceInformationPtr si(new ob::SpaceInformation(space));
 
-    nav_msgs::Path plannedPath;
-    if (solved) {// if cussess
-        // get the planned path
-        plannedPath=extractPath(pdef.get());
-    }
-    return plannedPath;
+	 // Set the object used to check which states in the space are valid
+	si->setStateValidityChecker(ob::StateValidityCheckerPtr(new ValidityChecker(si)));
+	si->setup();
+
+	// Set our robot's starting state to be the bottom-left corner of
+	// the environment, or (0,0).
+	ob::ScopedState<> start(space);
+	start->as<ob::RealVectorStateSpace::StateType>()->values[0] = point_start_x;
+	start->as<ob::RealVectorStateSpace::StateType>()->values[1] = point_start_y;
+
+	// Set our robot's goal state to be the top-right corner of the
+	// environment, or (5,5).
+	ob::ScopedState<> goal(space);
+	goal->as<ob::RealVectorStateSpace::StateType>()->values[0] = point_end_x;
+	goal->as<ob::RealVectorStateSpace::StateType>()->values[1] = point_end_y;
+
+	// Create a problem instance
+	ob::ProblemDefinitionPtr pdef(new ob::ProblemDefinition(si));
+
+	// Set the start and goal states
+	pdef->setStartAndGoalStates(start, goal);
+
+	// Create the optimization objective
+	pdef->setOptimizationObjective(getBalancedObjective(si));
+
+	// Construct our optimizing planner using the RRTstar algorithm.
+	auto optimizingPlanner(std::make_shared<og::RRTstar>(si));
+	optimizingPlanner->setRange(maxStepLength);// max step length
+
+	// Set the problem instance for our planner to solve
+	optimizingPlanner->setProblemDefinition(pdef);
+	optimizingPlanner->setup();
+
+	// attempt to solve the planning problem within one second of
+	// planning time
+	ob::PlannerStatus solved = optimizingPlanner->ob::Planner::solve(1.0);
+
+ 	nav_msgs::Path plannedPath;
+	 if (solved)
+ 	    {
+  	    	plannedPath=extractPath(pdef.get());
+ 	    }
+  	   else
+	    {
+  	       std::cout << "No solution found." << std::endl;
+	    }
+
+	 return plannedPath;
 }
 
 /// configure planner
-void Planner2D::configure(double point_start_x, double point_start_y, double point_end_x, double point_end_y){
-
-    dim = 2;//2D problem
-    maxStepLength = 0.1;// max step length
-
-    // create bounds for the x axis
-    coordXBound.reset(new ob::RealVectorBounds(dim-1));
-    coordXBound->setLow(-6.0);
-    coordXBound->setHigh(0.0);
-
-    // create bounds for the y axis
-    coordYBound.reset(new ob::RealVectorBounds(dim-1));
-    coordYBound->setLow(-6.0);
-    coordYBound->setHigh(0.0);
-
-    // construct the state space we are planning in
-    auto coordX(std::make_shared<ob::RealVectorStateSpace>(dim-1));
-    auto coordY(std::make_shared<ob::RealVectorStateSpace>(dim-1));
-    space = coordX +coordY;
-
-    // create bounds for the x axis
-    coordX->setBounds(*coordXBound.get());
-
-    // create bounds for the y axis
-    coordY->setBounds(*coordYBound.get());
-
-    // define the start position
-    start.reset(new ob::ScopedState<>(space));
-    (*start.get())[0]= point_start_x;
-    (*start.get())[1]= point_start_y;
-//    start.get()->random();
-
-    // define the goal position
-    goal.reset(new ob::ScopedState<>(space));
-    (*goal.get())[0]= point_end_x;
-    (*goal.get())[1]= point_end_y;
-//    goal.get()->random();
+void Planner2D::configure(double point_start_x, double point_start_y, double point_end_x, double point_end_y)
+{
+	maxStepLength = 0.05;// max step length
 }
 
 } /* namespace */

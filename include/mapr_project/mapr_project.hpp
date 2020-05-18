@@ -21,7 +21,19 @@
 #include <std_msgs/UInt8.h>
 #include <moveit/ompl_interface/ompl_interface.h>
 #include <ompl/geometric/planners/rrt/RRTstar.h>
+#include <ompl/geometric/planners/rrt/RRTConnect.h>
 #include <ompl/base/spaces/RealVectorStateSpace.h>
+#include <ompl/base/OptimizationObjective.h>
+#include <ompl/base/objectives/PathLengthOptimizationObjective.h>
+#include <ompl/base/ProblemDefinition.h>
+#include <ompl/base/PlannerStatus.h>
+#include <ompl/base/Planner.h>
+#include <ompl/base/StateSpace.h>
+#include <ompl/base/StateValidityChecker.h>
+#include <ompl/base/SpaceInformation.h>
+#include <ompl/base/objectives/PathLengthOptimizationObjective.h>
+#include <ompl/base/objectives/StateCostIntegralObjective.h>
+#include <ompl/base/objectives/MaximizeMinClearanceObjective.h>
 #include <ompl/base/Cost.h>
 
 // Boost
