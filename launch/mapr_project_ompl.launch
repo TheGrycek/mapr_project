@@ -3,8 +3,11 @@
 <launch>
 
   <!-- rosbag elevation map -->
-  <node pkg="rosbag" type="play" name="player" output="screen" args="--clock $(find mapr_project)/maps/terrain_map.bag"/>
-
+  <node pkg="rosbag" type="play" name="player" output="screen" args="-l --clock $(find mapr_project)/maps/terrain_map.bag"/>
+  
+  <!-- python -->
+  <node pkg="mapr_project" name="elevMap_start_end" type="elevMap_start_end.py" output="screen"/> 
+  
   <!-- RViz -->
   <node name="rviz" pkg="rviz" type="rviz" args="-d $(find mapr_project)/rviz/elevation_map_ompl.rviz" />
 

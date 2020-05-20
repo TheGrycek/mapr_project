@@ -276,7 +276,7 @@ nav_msgs::Path Planner2D::planPath(const grid_map_msgs::GridMap& globalMap){
 /// configure planner
 void Planner2D::configure(double point_start_x, double point_start_y, double point_end_x, double point_end_y)
 {
-        maxStepLength = 0.001;// max step length
+        maxStepLength = 0.005;// max step length
 }
 
 } /* namespace */
