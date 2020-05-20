@@ -23,6 +23,7 @@ end_z = np.float64(0)
 data_tmp = []
 stride0, stride1, cols, rows, offset = 0, 0, 0, 0, 0
 old_image = np.zeros(3600)
+loaded = False
 
 cwd = str(Path(__file__).resolve().parent.parent)
 image_dir = cwd + '/images'
@@ -57,7 +58,7 @@ def callback_map(elev_map):
    map_cpy.inner_start_index = elev_map.inner_start_index
 
 def callback_path(path):
-   global img_number, image_dir, stride0, stride1, cols, rows, offset, data_tmp, old_image
+   global img_number, image_dir, stride0, stride1, cols, rows, offset, data_tmp, old_image, loaded
 
    new_image = np.array(list(data_tmp))
    max = np.amax(data_tmp)
@@ -69,8 +70,8 @@ def callback_path(path):
        new_image[pix] = ((new_image[pix] - min) / (max - min)) * (255 - 5) + 5
        new_image[pix] = np.uint8(round(new_image[pix]))
 
-   new_image[offset + start_y + stride1 * start_x + 0] = 0
-   new_image[offset + end_y + stride1 * end_x + 0] = 0
+   # new_image[offset + start_y + stride1 * start_x + 0] = 0
+   # new_image[offset + end_y + stride1 * end_x + 0] = 0
    print("Start point:")
    print(start_x, start_y)
    print("End point:")
@@ -82,15 +83,16 @@ def callback_path(path):
 
        print(posX, posY)
        old_image[offset + posY + stride1 * posX + 0] = 0
-
+       if posY | posX != 0:
+          loaded = True
 
    img_write = old_image.reshape(rows, cols)
    os.chdir(image_dir)
-   if img_number != 0:
-      cv.imwrite(image_name, img_write)
-
-   old_image = new_image
-   img_number += 1
+   if loaded:
+      if img_number != 0:
+         cv.imwrite(image_name, img_write)
+      old_image = new_image
+      img_number += 1
 
 def mapListener():
    global start_x, start_y, end_x, end_y, start_z, end_z
