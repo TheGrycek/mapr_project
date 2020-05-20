@@ -31,7 +31,7 @@ grid_map_msgs::GridMap gridMap;
 double point_start_x = -0.5;
 double point_start_y = -0.5;
 double point_end_x = -5.0;
-double point_end_y = -5.8;
+double point_end_y = -5.0;
 
 class ValidityChecker : public ob::StateValidityChecker
 {
@@ -276,7 +276,7 @@ nav_msgs::Path Planner2D::planPath(const grid_map_msgs::GridMap& globalMap){
 /// configure planner
 void Planner2D::configure(double point_start_x, double point_start_y, double point_end_x, double point_end_y)
 {
-	maxStepLength = 0.05;// max step length
+        maxStepLength = 0.001;// max step length
 }
 
 } /* namespace */
