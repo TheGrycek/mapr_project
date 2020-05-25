@@ -153,10 +153,10 @@ Planner2D::~Planner2D()
 
 void Planner2D::returnPoints(std_msgs::UInt8 pStartX, std_msgs::UInt8 pStartY,
                              std_msgs::UInt8 pEndX, std_msgs::UInt8 pEndY){
-    point_start_x = double(pStartX.data) * 0.1 - 6.0;
-    point_start_y = double(pStartY.data) * 0.1 - 6.0;
-    point_end_x = double(pEndX.data) * 0.1 - 6.0;
-    point_end_y = double(pEndY.data) * 0.1 - 6.0;
+    point_start_x = double(pStartX.data) * (-0.1);
+    point_start_y = double(pStartY.data) * (-0.1);
+    point_end_x = double(pEndX.data) * (-0.1);
+    point_end_y = double(pEndY.data) * (-0.1);
 }
 
 /// extract path
@@ -212,6 +212,9 @@ nav_msgs::Path Planner2D::planPath(const grid_map_msgs::GridMap& globalMap){
 
     	gridMap = globalMap;
 	configure(point_start_x, point_start_y, point_end_x, point_end_y);
+
+	//std::cout << "point_start_x" << point_start_x << std::endl;
+	//std::cout << "point_start_y" << point_start_y << std::endl;
 
     // Construct the robot state space in which we're planning. We're
 	// planning in [0,1]x[0,1], a subset of R^2.
@@ -276,7 +279,7 @@ nav_msgs::Path Planner2D::planPath(const grid_map_msgs::GridMap& globalMap){
 /// configure planner
 void Planner2D::configure(double point_start_x, double point_start_y, double point_end_x, double point_end_y)
 {
-        maxStepLength = 0.005;// max step length
+        maxStepLength = 0.05;// max step length
 }
 
 } /* namespace */

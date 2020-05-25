@@ -24,10 +24,10 @@ data_tmp = []
 stride0, stride1, cols, rows, offset = 0, 0, 0, 0, 0
 old_image = np.zeros(3600)
 loaded = False
-neighbours = [(0, -1), (0, 1), (-1, 0), (1, 0), (1, 1), (-1, -1), (1, -1), (-1, 1)]
 
 cwd = str(Path(__file__).resolve().parent.parent)
-image_dir = cwd + '/images'
+image_dir2 = cwd + '/images/images2'
+image_dir1 = cwd + '/images/images1'
 img_number = 0
 
 def callback_map(elev_map):
@@ -43,17 +43,18 @@ def callback_map(elev_map):
    data_tmp = list(map_cpy.data[0].data)
 
    start_x, start_y, end_x, end_y = 0, 0, 0, 0
-   while(abs(start_x - end_x) + abs(start_y - end_y) <= 10
-         or start_x == 0 or start_y == 60 or end_x == 60 or end_x == 0
-         or start_x == 60 or start_y == 0 or end_x == 0 or end_x == 60):
-
+   while(abs(start_x - end_x) + abs(start_y - end_y) <= 10):
       start_x = rd.randrange(0, rows, 1)
       end_x = rd.randrange(0, rows, 1)
       start_y = rd.randrange(0, cols, 1)
       end_y = rd.randrange(0, cols, 1)
+      #start_x = 5
+      #end_x = 35
+      #start_y = 5
+      #end_y = 55
 
-   start_z = data_tmp[offset + start_y + stride1 * start_x + 0]
-   end_z = data_tmp[offset + end_y + stride1 * end_x + 0]
+   #start_z = data_tmp[offset + start_y + stride1 * start_x + 0]
+   #end_z = data_tmp[offset + end_y + stride1 * end_x + 0]
 
    map_cpy.info = elev_map.info
    map_cpy.layers = elev_map.layers
@@ -62,7 +63,7 @@ def callback_map(elev_map):
    map_cpy.inner_start_index = elev_map.inner_start_index
 
 def callback_path(path):
-   global img_number, image_dir, stride0, stride1, cols, rows, offset, data_tmp, old_image, loaded, neigbours
+   global img_number,image_dir1, image_dir2, stride0, stride1, cols, rows, offset, data_tmp, old_image, loaded
 
    new_image = np.array(list(data_tmp))
    max = np.amax(data_tmp)
@@ -71,39 +72,61 @@ def callback_path(path):
 
    for pix in range(new_image.size):
       # map pixels value range 5 - 255
-       new_image[pix] = ((new_image[pix] - min) / (max - min)) * (255 - 5) + 5
+       new_image[pix] = ((new_image[pix] - min) / (max - min)) * (255 - 30) + 30
        new_image[pix] = np.uint8(round(new_image[pix]))
 
-   # new_image[offset + start_y + stride1 * start_x + 0] = 0
-   # new_image[offset + end_y + stride1 * end_x + 0] = 0
-   print("Start point:")
-   print(start_x, start_y)
-   print("End point:")
-   print(end_x, end_y)
-   print("Path points:")
+   #print("Start point:")
+   #print(start_x, start_y)
+   #print("End point:")
+   #print(end_x, end_y)
+   #print("Path points:")
+
+   path_points = []  # tablica potrzebna do interpolacji sciezki
+   old_image2 = new_image.copy()
+
    for pos in path.poses:
-       posX = int(round(((float)(pos.pose.position.x) + 6) / 0.1))
-       posY = int(round(((float)(pos.pose.position.y) + 6) / 0.1))
-       # print(posX, posY)
+       posX = int(pos.pose.position.x / (-0.1))
+       posY = int(pos.pose.position.y / (-0.1))
 
-       old_image[offset + posY + stride1 * posX + 0] = 0
-       for neigh in neighbours:
-          posX_n = posX + neigh[0]
-          posY_n = posY + neigh[1]
-          index = offset + posY_n + stride1 * posX_n + 0
-          if index <= 3600:
-            old_image[index] = 0
-
+       #print(posX, posY)
+       path_points.append((posX,posY))	
+       #print(pos.pose.position.x, pos.pose.position.y)
+       old_image[offset + posX + stride1 * posY + 0] = 0
        if posY | posX != 0:
-          loaded = True
+           loaded = True
 
-   img_write = old_image.reshape(rows, cols)
-   os.chdir(image_dir)
+   #zdjecia z punktem startowym i koncowym
+   koniec = len(path_points)
+
+   if koniec:
+	koniec = koniec-1
+
+   old_image2[offset + path_points[0][0] + stride1 * path_points[0][1]] = 0	
+   old_image2[offset + path_points[koniec][0] + stride1 * path_points[koniec][1]] = 0	
+	
+   img_write1 = old_image2.reshape(rows, cols)
+   img_write2 = old_image.reshape(rows, cols)
+   
+
+   # interpolacja sciezki	
+   start = path_points[0]	
+   for pos in path_points:
+   	cv.line(img_write2 ,start,pos,0,1)
+	start = pos
+
    if loaded:
-      if img_number != 0 and img_number < 10000:
-         cv.imwrite(image_name, img_write)
+      if img_number != 0:
+	 # zapis zdjecia z punktem startowym i koncowym
+	  os.chdir(image_dir1)
+	  cv.imwrite(image_name, img_write1)
+	# zapis sciezki
+	  os.chdir(image_dir2)
+          cv.imwrite(image_name, img_write2)
+
       old_image = new_image
-      img_number += 1
+      img_number += 1	
+  	
+  
 
 def mapListener():
    global start_x, start_y, end_x, end_y, start_z, end_z

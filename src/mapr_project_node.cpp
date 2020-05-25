@@ -24,6 +24,7 @@ std_msgs::UInt8 start_x;
 std_msgs::UInt8 start_y;
 std_msgs::UInt8 end_x;
 std_msgs::UInt8 end_y;
+int licznik = 0;
 
 //nav_msgs::OccupancyGrid globalMap;
 
@@ -95,7 +96,8 @@ int main(int argc, char** argv)
         nav_msgs::Path plannedPath;
         planner_.returnPoints(start_x, start_y, end_x, end_y);
         plannedPath = planner_.planPath(globalMap);
-
+	licznik++;
+	std::cout << "Liczba wykonaych iteracji: " << licznik<< "\n";
         // publish the planned path
         path_pub.publish(plannedPath);
 
