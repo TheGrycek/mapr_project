@@ -16,9 +16,5 @@ $ python3.7 -m pip install pip
 
 ## in PyCharm go to Settings -> Project Interpreter, 
 ## change interpreter to System Interpreter: /usr/bin/python3.7
-## add libraries: torch, torchvision, numpy
-## run example script nn_example.py
-## uncomment 8-th line (device = torch.device("cuda:0")) to check if program is running on GPU
-## if it's not - check if NVIDIA drivers are OK (https://launchpad.net/~graphics-drivers/+archive/ubuntu/ppa), install CUDA drivers:
-##  https://developer.nvidia.com/cuda-downloads?target_os=Linux&target_arch=x86_64&target_distro=Ubuntu&target_version=1804&target_type=deblocal
+## add libraries: torch, torchvision, torchsummary, tqdm, opencv, numpy
 $ sudo reboot
