@@ -23,6 +23,8 @@ end_z = np.float64(0)
 data_tmp = []
 stride0, stride1, cols, rows, offset = 0, 0, 0, 0, 0
 old_image = np.zeros(3600)
+neighbours1 = [(0, -1), (0, 1), (1, 0), (1, -1), (1, 1)]
+neighbours2 = [(0, -1), (0, 1), (-1, 0), (1, 0), (1, 1), (-1, -1), (1, -1), (-1, 1)]
 loaded = False
 
 cwd = str(Path(__file__).resolve().parent.parent)
@@ -44,17 +46,10 @@ def callback_map(elev_map):
 
    start_x, start_y, end_x, end_y = 0, 0, 0, 0
    while(abs(start_x - end_x) + abs(start_y - end_y) <= 10):
-      start_x = rd.randrange(0, rows, 1)
-      end_x = rd.randrange(0, rows, 1)
-      start_y = rd.randrange(0, cols, 1)
-      end_y = rd.randrange(0, cols, 1)
-      #start_x = 5
-      #end_x = 35
-      #start_y = 5
-      #end_y = 55
-
-   #start_z = data_tmp[offset + start_y + stride1 * start_x + 0]
-   #end_z = data_tmp[offset + end_y + stride1 * end_x + 0]
+      start_x = rd.randrange(1, rows - 1, 1)
+      end_x = rd.randrange(1, rows - 1, 1)
+      start_y = rd.randrange(1, cols - 1, 1)
+      end_y = rd.randrange(1, cols - 1, 1)
 
    map_cpy.info = elev_map.info
    map_cpy.layers = elev_map.layers
@@ -63,7 +58,7 @@ def callback_map(elev_map):
    map_cpy.inner_start_index = elev_map.inner_start_index
 
 def callback_path(path):
-   global img_number,image_dir1, image_dir2, stride0, stride1, cols, rows, offset, data_tmp, old_image, loaded
+   global img_number, image_dir1, image_dir2, stride0, stride1, cols, rows, offset, data_tmp, old_image, loaded
 
    new_image = np.array(list(data_tmp))
    max = np.amax(data_tmp)
@@ -87,11 +82,17 @@ def callback_path(path):
    for pos in path.poses:
        posX = int(pos.pose.position.x / (-0.1))
        posY = int(pos.pose.position.y / (-0.1))
-
-       #print(posX, posY)
-       path_points.append((posX,posY))	
-       #print(pos.pose.position.x, pos.pose.position.y)
+       path_points.append((posX, posY))
        old_image[offset + posX + stride1 * posY + 0] = 0
+
+       for neigh in neighbours1:
+          posY_n = posX + neigh[0]
+          posX_n = posY + neigh[1]
+          index = offset + posY_n + stride1 * posX_n + 0
+
+          if index <= 3600:
+             old_image[index] = 0
+
        if posY | posX != 0:
            loaded = True
 
@@ -99,33 +100,49 @@ def callback_path(path):
    koniec = len(path_points)
 
    if koniec:
-	koniec = koniec-1
+      koniec = koniec-1
 
-   old_image2[offset + path_points[0][0] + stride1 * path_points[0][1]] = 0	
-   old_image2[offset + path_points[koniec][0] + stride1 * path_points[koniec][1]] = 0	
-	
-   img_write1 = old_image2.reshape(rows, cols)
-   img_write2 = old_image.reshape(rows, cols)
-   
+   old_image2[offset + path_points[0][0] + stride1 * path_points[0][1]] = 0
+   old_image2[offset + path_points[koniec][0] + stride1 * path_points[koniec][1]] = 0
 
-   # interpolacja sciezki	
-   start = path_points[0]	
-   for pos in path_points:
-   	cv.line(img_write2 ,start,pos,0,1)
-	start = pos
+   try:
+      for neigh in neighbours2:
+         posY_s = path_points[0][0] + neigh[0]
+         posX_s = path_points[0][1] + neigh[1]
+         posY_e = path_points[koniec][0] + neigh[0]
+         posX_e = path_points[koniec][1] + neigh[1]
+         index_s = offset + posY_s + stride1 * posX_s + 0
+         index_e = offset + posY_e + stride1 * posX_e + 0
+         if index_s <= 3600:
+            old_image2[index_s] = 0
+         if index_e <= 3600:
+            old_image2[index_e] = 0
 
-   if loaded:
-      if img_number != 0:
-	 # zapis zdjecia z punktem startowym i koncowym
-	  os.chdir(image_dir1)
-	  cv.imwrite(image_name, img_write1)
-	# zapis sciezki
-	  os.chdir(image_dir2)
-          cv.imwrite(image_name, img_write2)
+      img_write1 = old_image2.reshape(rows, cols)
+      img_write2 = old_image.reshape(rows, cols)
 
-      old_image = new_image
-      img_number += 1	
-  	
+      # interpolacja sciezki
+      start = path_points[0]
+      for pos in path_points:
+         cv.line(img_write2, start, pos, 0, 2)
+         start = pos
+
+      if loaded:
+         if img_number != 0:
+            # zapis zdjecia z punktem startowym i koncowym
+            os.chdir(image_dir1)
+            cv.resize(img_write1, dsize=(64, 64), interpolation=cv.INTER_AREA)
+            cv.imwrite(image_name, img_write1)
+            # zapis sciezki
+            os.chdir(image_dir2)
+            cv.resize(img_write2, dsize=(64, 64), interpolation=cv.INTER_AREA)
+            cv.imwrite(image_name, img_write2)
+
+         old_image = new_image
+         img_number += 1
+
+   except Exception as E:
+      print(str(E))
   
 
 def mapListener():
@@ -133,7 +150,6 @@ def mapListener():
 
    rospy.init_node('start_end', anonymous=True)
    rospy.Subscriber("/map_copy", msg.GridMap, callback_map)
-   # spin() simply keeps python from exiting until this node is stopped
    pub_start_x = rospy.Publisher('/start_point_x', UInt8, queue_size=10)
    pub_end_x = rospy.Publisher('/end_point_x', UInt8, queue_size=10)
    pub_start_y = rospy.Publisher('/start_point_y', UInt8, queue_size=10)
