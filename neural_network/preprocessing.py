@@ -21,8 +21,8 @@ class Preprocessing():
             for pic in tqdm(os.listdir(self.points_dir)):
                 path_points = os.path.join(self.points_dir, pic)
                 path_paths = os.path.join(self.paths_dir, pic)
-                img_points = cv2.imread(path_points)
-                img_paths = cv2.imread(path_paths)
+                img_points = cv2.imread(path_points)/255.0
+                img_paths = cv2.imread(path_paths)/255.0
                 self.trainig_data.append([np.array(img_points), np.array(img_paths)])
 
             np.save("training_data.npy", self.trainig_data)
@@ -55,7 +55,7 @@ class Preprocessing():
                                     if print_info:
                                         print(f"IMAGE: {pic}")
                                         print(f"PIXEL: {[i], [j]}")
-                                        print(f"PIXEL RANGE: {pix_range} <= pix <= {pix_range + shift}")
+                                        print(f"PIXEL RANGE: {pix_range} <= pix <= {pix_range + shift - 1}")
                                         print(f"CLASS NUMBER: {k}")
                                     break
                                 else:
@@ -82,6 +82,5 @@ class Preprocessing():
 # training_data = np.load("training_data.npy")
 # print(len(training_data))
 # print(training_data[0])
-#
 # plt.imshow(training_data[0][1])
 # plt.show()
