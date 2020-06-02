@@ -13,7 +13,8 @@ class Preprocessing():
     paths_dir = cwd + "/images/images2"
     directories = [points_dir, paths_dir]
 
-    def make_trainig_data(self):
+    def make_trainig_data(self, img_sie=64):
+        self.img_size = img_sie
         '''
         :return: saves training data as *.npy file (list created with 2 images: points and path
         '''
@@ -23,6 +24,8 @@ class Preprocessing():
                 path_paths = os.path.join(self.paths_dir, pic)
                 img_points = cv2.imread(path_points)/255.0
                 img_paths = cv2.imread(path_paths)/255.0
+                img_points = cv2.resize(img_points, (self.img_size, self.img_size))
+                img_paths = cv2.resize(img_paths, (self.img_size, self.img_size))
                 self.trainig_data.append([np.array(img_points), np.array(img_paths)])
 
             np.save("training_data.npy", self.trainig_data)
@@ -72,10 +75,10 @@ class Preprocessing():
 
 
 
-# training_data = Preprocessing()
+training_data = Preprocessing()
 # print(training_data.points_dir)
 # print(training_data.paths_dir)
-# training_data.make_trainig_data()
+training_data.make_trainig_data(img_sie=64)
 # classes = training_data.classify_pix(2, print_info=False)
 # print(classes)
 

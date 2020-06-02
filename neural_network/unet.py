@@ -2,6 +2,10 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torchsummary import summary
+import torch.optim as optim
+import numpy as np
+from torch.utils.data.dataset import random_split
+
 
 class Layer(nn.Module):
 
@@ -25,7 +29,7 @@ class Layer(nn.Module):
 
         output = self.conv1(input_d)
         if self.batch_norm:
-            ioutput = self.batch1(output)
+            output = self.batch1(output)
         output = nn.ReLU()(output)
 
         output = self.conv2(output)
@@ -43,8 +47,9 @@ class Layer(nn.Module):
 
 
 class Unet(nn.Module):
-    def __init__(self, input_size=1, output_size=1, first_filter_size=64, kernel_size=3, padding=1):
+    def __init__(self, img_size=60, input_size=1, output_size=1, first_filter_size=64, kernel_size=3, padding=1):
         super().__init__()
+        self.img_size = img_size
         self.input_size = input_size
         self.output_size = output_size
         self.first_filter_size = first_filter_size
@@ -93,7 +98,8 @@ class Unet(nn.Module):
 
         return output_data
 
-
 if __name__ == "__main__":
+    '''
     u_network = Unet()
     summary(u_network, (1, 64, 64))
+    '''
