@@ -62,32 +62,32 @@ public:
   	if(gridMap.info.length_x>0)  // Mapa wysokosci subskyrbowana
 	{
 		// Wysokosc z jakiej startujemy i do jakiej zmierzamy
-		point_start_z = gridMap.data[0].data[(point_start_x/resolution*(-1)) + (point_start_y/resolution*(-1)) * 60];
-		point_end_z = gridMap.data[0].data[(point_end_x/resolution*(-1)) + (point_end_y/resolution*(-1)) * 60];
+		point_start_z = gridMap.data[0].data[(point_start_x/resolution*(-1)) + (point_start_y/resolution*(-1)) * 64];
+		point_end_z = gridMap.data[0].data[(point_end_x/resolution*(-1)) + (point_end_y/resolution*(-1)) * 64];
 		//std::cout << "point_start_z: " << point_start_z << " point_end_z: " << point_end_z << "\n";
 
 		// Idziemy z gorki
 		if(point_start_z > point_end_z) 	
 		{
-			if ((gridMap.data[0].data[col + row * 60]<point_start_z) && (gridMap.data[0].data[col + row * 60]>point_end_z))
+			if ((gridMap.data[0].data[col + row * 64]<point_start_z) && (gridMap.data[0].data[col + row * 64]>point_end_z))
 	    		{
 				
-				return gridMap.data[0].data[col + row * 60]; 
+				return gridMap.data[0].data[col + row * 64]; 
 	 		} 
 		 	else
 			{
-				return gridMap.data[0].data[col + row * 60]*gridMap.data[0].data[col + row * 60]; 
+				return gridMap.data[0].data[col + row * 64]*gridMap.data[0].data[col + row * 64]; 
 			}
 		}
 		else // Idziemy pod gore
 		{
-			if ((gridMap.data[0].data[col + row * 60]>point_start_z) && (gridMap.data[0].data[col + row * 60]<point_end_z))
+			if ((gridMap.data[0].data[col + row * 64]>point_start_z) && (gridMap.data[0].data[col + row * 64]<point_end_z))
 	    		{
-				return gridMap.data[0].data[col + row * 60]; 
+				return gridMap.data[0].data[col + row * 64]; 
 	 		} 
 		 	else
 			{
-				return gridMap.data[0].data[col + row * 60]*gridMap.data[0].data[col + row * 60]; 
+				return gridMap.data[0].data[col + row * 64]*gridMap.data[0].data[col + row * 64]; 
 			}
 
 		}	
@@ -189,7 +189,7 @@ nav_msgs::Path Planner2D::extractPath(ob::ProblemDefinition* pdef){
         poseMsg.pose.position.y = y;
 	if (gridMap.info.length_x)
     	{
-		poseMsg.pose.position.z = gridMap.data[0].data[col + row * 60] +0.1; 
+		poseMsg.pose.position.z = gridMap.data[0].data[col + row * 64] +0.1; 
  	}
 	else
 	{
@@ -221,7 +221,7 @@ nav_msgs::Path Planner2D::planPath(const grid_map_msgs::GridMap& globalMap){
 	ob::StateSpacePtr space(new ob::RealVectorStateSpace(2));
 
 	// Set the bounds of space to be in [0,1].
-	space->as<ob::RealVectorStateSpace>()->setBounds(-6.0, 0.0);
+	space->as<ob::RealVectorStateSpace>()->setBounds(-6.4, 0.0);
 
 	// Construct a space information instance for this state space
 	ob::SpaceInformationPtr si(new ob::SpaceInformation(space));

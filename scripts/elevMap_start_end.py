@@ -22,7 +22,7 @@ end_y = np.uint8(0)
 end_z = np.float64(0)
 data_tmp = []
 stride0, stride1, cols, rows, offset = 0, 0, 0, 0, 0
-old_image = np.zeros(3600)
+old_image = np.zeros(4096)
 neighbours1 = [(0, -1), (0, 1), (1, 0), (1, -1), (1, 1)]
 neighbours2 = [(0, -1), (0, 1), (-1, 0), (1, 0), (1, 1), (-1, -1), (1, -1), (-1, 1)]
 loaded = False
@@ -66,7 +66,7 @@ def callback_path(path):
    image_name = 'map%u.png' % img_number
 
    for pix in range(new_image.size):
-      # map pixels value range 5 - 255
+      # map pixels value range 30 - 255
        new_image[pix] = ((new_image[pix] - min) / (max - min)) * (255 - 30) + 30
        new_image[pix] = np.uint8(round(new_image[pix]))
 
@@ -90,7 +90,7 @@ def callback_path(path):
           posX_n = posY + neigh[1]
           index = offset + posY_n + stride1 * posX_n + 0
 
-          if index <= 3600:
+          if index <= 4096:
              old_image[index] = 0
 
        if posY | posX != 0:
@@ -113,9 +113,9 @@ def callback_path(path):
          posX_e = path_points[koniec][1] + neigh[1]
          index_s = offset + posY_s + stride1 * posX_s + 0
          index_e = offset + posY_e + stride1 * posX_e + 0
-         if index_s <= 3600:
+         if index_s <= 4096:
             old_image2[index_s] = 0
-         if index_e <= 3600:
+         if index_e <= 4096:
             old_image2[index_e] = 0
 
       img_write1 = old_image2.reshape(rows, cols)
@@ -131,11 +131,11 @@ def callback_path(path):
          if img_number != 0:
             # zapis zdjecia z punktem startowym i koncowym
             os.chdir(image_dir1)
-            cv.resize(img_write1, dsize=(64, 64), interpolation=cv.INTER_AREA)
+            #cv.resize(img_write1, dsize=(64, 64), interpolation=cv.INTER_AREA)
             cv.imwrite(image_name, img_write1)
             # zapis sciezki
             os.chdir(image_dir2)
-            cv.resize(img_write2, dsize=(64, 64), interpolation=cv.INTER_AREA)
+            #cv.resize(img_write2, dsize=(64, 64), interpolation=cv.INTER_AREA)
             cv.imwrite(image_name, img_write2)
 
          old_image = new_image

@@ -98,7 +98,7 @@ class Unet(nn.Module):
 
         return output_data
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
     '''
     u_network = Unet()
     summary(u_network, (1, 64, 64))

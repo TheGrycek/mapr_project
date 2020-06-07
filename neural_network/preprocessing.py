@@ -3,7 +3,7 @@ import cv2
 import numpy as np
 from tqdm import tqdm
 from pathlib import Path
-# import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 
 class Preprocessing():
 
@@ -22,10 +22,12 @@ class Preprocessing():
             for pic in tqdm(os.listdir(self.points_dir)):
                 path_points = os.path.join(self.points_dir, pic)
                 path_paths = os.path.join(self.paths_dir, pic)
-                img_points = cv2.imread(path_points)/255.0
-                img_paths = cv2.imread(path_paths)/255.0
-                img_points = cv2.resize(img_points, (self.img_size, self.img_size))
-                img_paths = cv2.resize(img_paths, (self.img_size, self.img_size))
+                img_points = cv2.imread(path_points, 0)
+                img_paths = cv2.imread(path_paths, 0)
+                img_points = img_points/255.0
+                img_paths = img_paths/255.0
+                # img_points = cv2.resize(img_points, (self.img_size, self.img_size))
+                # img_paths = cv2.resize(img_paths, (self.img_size, self.img_size))
                 self.trainig_data.append([np.array(img_points), np.array(img_paths)])
 
             np.save("training_data.npy", self.trainig_data)
@@ -76,14 +78,20 @@ class Preprocessing():
 
 
 training_data = Preprocessing()
-# print(training_data.points_dir)
-# print(training_data.paths_dir)
+print(training_data.points_dir)
+print(training_data.paths_dir)
 training_data.make_trainig_data(img_sie=64)
 # classes = training_data.classify_pix(2, print_info=False)
 # print(classes)
 
-# training_data = np.load("training_data.npy")
-# print(len(training_data))
-# print(training_data[0])
-# plt.imshow(training_data[0][1])
-# plt.show()
+training_data = np.load("training_data.npy")
+print("Liczba probek: ", len(training_data))
+print("Rozmiar: ", training_data.shape)
+
+plt.figure()
+plt.subplot(121)
+plt.imshow(training_data[0][0], cmap='gray')
+
+plt.subplot(122)
+plt.imshow(training_data[0][1], cmap='gray')
+plt.show()
