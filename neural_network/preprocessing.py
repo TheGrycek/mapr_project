@@ -89,6 +89,7 @@ print("Liczba probek: ", len(training_data))
 print("Rozmiar: ", training_data.shape)
 
 plt.figure()
+
 plt.subplot(121)
 plt.imshow(training_data[0][0], cmap='gray')
 
