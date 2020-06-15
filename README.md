@@ -46,7 +46,7 @@ $ roslaunch mapr_project mapr_project_ompl.launch
 3. Szukanie sciezki - do wyszukiwania sciezki zostal uzyty algotyrm RRT* z biblioteki OMPL, dodatkowo sciezka jest optymalizowana pod wzgledem kosztu, ktorym jest wysokosc na mapie w danym punktcie. Do optymalizacji kosztu uzyto rowniez elementu biblioteki OMPL - Optimization Objectives
 https://ompl.kavrakilab.org/optimizationObjectivesTutorial.html. Node planera subskrybuje mape z rosbaga i losawane punkty z topika, nastepnie wyszukuje sciezke i publikuje ja w topiku.
 <p align="center"> 
-<img src="doc/elevation_map_path.JPG">
+<img src="doc/elevation_map_path.JPG" width="750px" height="300px">
 </p>
 
 
