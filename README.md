@@ -37,31 +37,41 @@ $ roslaunch mapr_project mapr_project_ompl.launch
 
 1. Generowanie mapy - na podstawie informacji z repozytorium https://github.com/ANYbotics/grid_map zostal napisany skrypt elevMap_create.py, ktory generuje mape wysokosciowa (widoczna ponizej) o wymiarach 64x64 piksele. Mapa nastepnie zostala zapisana do rosbaga.
 
-![Mapa](https://github.com/Kamilkim/mapr_project/blob/master/doc/elevation_map.JPG)
+<p align="center"> 
+<img src="doc/elevation_map.JPG">
+</p>
 
 2. Losowanie startu i mety - skrypt subsykrybuje mape wysokosciowa z uruchomionego rosbaga i losuje na jej powierzchn dwa punkty startowy i koncowy. Zostalo dodane ogranicze ktore powoduje, ze punkty nie moga byc wylosowane blizej siebie wiecej niz na 5 pikseli. Nastepnie punkty sa publikowane w topiku.
 
-![Mapa](https://github.com/Kamilkim/mapr_project/blob/master/doc/elevation_map_points.JPG)
+<p align="center"> 
+<img src="doc/elevation_map_points.JPG">
+</p>
 
 3. Szukanie sciezki - do wyszukiwania sciezki zostal uzyty algotyrm RRT* z biblioteki OMPL, dodatkowo sciezka jest optymalizowana pod wzgledem kosztu, ktorym jest wysokosc na mapie w danym punktcie. Do optymalizacji kosztu uzyto rowniez elementu biblioteki OMPL - Optimization Objectives
 https://ompl.kavrakilab.org/optimizationObjectivesTutorial.html. Node planera subskrybuje mape z rosbaga i losawane punkty z topika, nastepnie wyszukuje sciezke i publikuje ja w topiku.
+
 <p align="center"> 
-<img src="doc/elevation_map_path.JPG" width="750px" height="300px">
+<img src="doc/elevation_map_path.JPG">
 </p>
-
-
 
 4. Zapis mapy - Node z planerem jest uruchamiany co sekunde i co sekunde sa subskybowane nowe punkty i wyszukiwana miedzy nimi sciezka.
 
 
-![Mapa](https://github.com/Kamilkim/mapr_project/blob/master/doc/planning.gif)
+<p align="center"> 
+<img src="doc/planinig.gif">
+</p>
 
 Punkty startowy i koncowy sa zapisywane jako zdjecie. Po znalezieniu sciezki rowniez ona zapisywana jest jako zdjecie. Zbior par zdjec (punktow i sciezek) zostal wykorzystany do uczenia sieci neuronowej, ktora nasladuje uzyty algorytm trasowania sciezki.
 
 5. Model sieci neurownej
 
-![Mapa](https://github.com/Kamilkim/mapr_project/blob/master/doc/data_point.png)
-![Mapa](https://github.com/Kamilkim/mapr_project/blob/master/doc/data_path.png)
+<p align="left"> 
+<img src="doc/data_point.png" width="256px" height="256px">
+</p>
+<p align="right"> 
+<img src="doc/data_path.png" width="256px" height="256px">
+</p>
+
 
 
 
