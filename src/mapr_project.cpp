@@ -216,7 +216,7 @@ nav_msgs::Path Planner2D::planPath(const grid_map_msgs::GridMap& globalMap){
 	//std::cout << "point_start_x" << point_start_x << std::endl;
 	//std::cout << "point_start_y" << point_start_y << std::endl;
 
-    // Construct the robot state space in which we're planning. We're
+   	 // Construct the robot state space in which we're planning. We're
 	// planning in [0,1]x[0,1], a subset of R^2.
 	ob::StateSpacePtr space(new ob::RealVectorStateSpace(2));
 
