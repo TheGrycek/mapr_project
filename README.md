@@ -66,8 +66,8 @@ Punkty startowy i koncowy sa zapisywane jako zdjecie. Po znalezieniu sciezki row
 5. Model sieci neurownej
 
 <p align="center"> 
-<img src="doc/data_point.png" width="128px" height="128px">
-<img src="doc/data_path.png" width="128px" height="128px">
+<img src="doc/data_point.png" width="256px" height="256px">
+<img src="doc/data_path.png" width="256px" height="256px">
 </p>
 
 
