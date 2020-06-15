@@ -58,7 +58,7 @@ https://ompl.kavrakilab.org/optimizationObjectivesTutorial.html. Node planera su
 
 
 <p align="center"> 
-<img src="doc/planinig.gif">
+<img src="doc/planning.gif">
 </p>
 
 Punkty startowy i koncowy sa zapisywane jako zdjecie. Po znalezieniu sciezki rowniez ona zapisywana jest jako zdjecie. Zbior par zdjec (punktow i sciezek) zostal wykorzystany do uczenia sieci neuronowej, ktora nasladuje uzyty algorytm trasowania sciezki.
