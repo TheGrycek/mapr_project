@@ -71,16 +71,19 @@ Punkty startowy i koncowy sa zapisywane jako zdjecie. Po znalezieniu sciezki row
 5. Model sieci neurownej - do tego problemu zostala wybrana siec konwolucyjna U-net o strukturze widocznej ponizej. Model sieci zostal zaimplementowany z uzyciem biblioteki PyTorch.
 
 <p align="center"> 
-<img src="doc/Model_sieci.png">
-
+<img src="doc/Model_sieci.PNG">
 </p>
 
-5. Rezulta uczenia sieci 
+6. Rezulta uczenia sieci 
 
 <p align="center"> 
-<img src="doc/1000probek_4epoki.png" title="Optional title">
-
+<img src="doc/1000probek_4epoki.png">
 </p>
+
+<p align="center"> 
+<img src="doc/6000probek_8epoki.png">
+</p>
+
 
 
 
