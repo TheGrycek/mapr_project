@@ -65,7 +65,7 @@ Node z planerem jest uruchamiany co sekunde i z taka czestotliwoscia sa subskybo
 <img src="doc/planning.gif">
 </p>
 
-Punkty startowy i koncowy sa zapisywane jako zdjecie. Po znalezieniu sciezki rowniez ona zapisywana jest jako zdjecie. Zbior par zdjec (punktow i sciezki) zostal wykorzystany do uczenia sieci neuronowej, ktora nasladuje uzyty algorytm trasowania sciezki.
+Punkty startowy i koncowy sa zapisywane jako zdjecie, po znalezieniu sciezki rowniez ona zostaje zapisana w formacie obrazu. Zbior par zdjec (punktow i sciezki) zostal wykorzystany do uczenia sieci neuronowej, ktora nasladuje uzyty algorytm trasowania sciezki.
 
 <p align="center"> 
 <img src="doc/data_point.png" width="256px" height="256px">
@@ -73,7 +73,7 @@ Punkty startowy i koncowy sa zapisywane jako zdjecie. Po znalezieniu sciezki row
 </p>
 
 ### 5. Model sieci neurownej 
-Do rozwiazana problemu zostala wybrana siec konwolucyjna U-net o strukturze widocznej ponizej. Model sieci zostal zaimplementowany z uzyciem biblioteki PyTorch. Wejsciem sieci jest obraz mapy wysokosciowej w skali szarosci z zaznaczonymi na czarno dwoma punktami (startowy i konocwy). Wynikiem sieci jest obraz mapy wysokosciowej z narysowana siezka pomiedzy punktami.
+Do rozwiazana problemu zostala wybrana siec konwolucyjna U-net o strukturze widocznej ponizej. Model sieci zostal zaimplementowany z uzyciem biblioteki PyTorch. Wejsciem sieci jest obraz mapy wysokosciowej w skali szarosci z zaznaczonymi na czarno dwoma punktami (startowy i koncowy). Wynikiem sieci jest obraz mapy wysokosciowej z narysowana siezka pomiedzy punktami.
 
 <p align="center"> 
 <img src="doc/Model_sieci.PNG">

@@ -1,7 +1,7 @@
 /*
  * mapr_project.cpp
  *
- *  Created on: May 13, 2020
+ *  Created on: June 15, 2020
  *      Author: Kamil Miedzinski Mateusz Grycmacher
  *	 Institute: Instute of Home, Poznan University of Technology
  */
@@ -153,10 +153,10 @@ Planner2D::~Planner2D()
 
 void Planner2D::returnPoints(std_msgs::UInt8 pStartX, std_msgs::UInt8 pStartY,
                              std_msgs::UInt8 pEndX, std_msgs::UInt8 pEndY){
-    //point_start_x = double(pStartX.data) * (-0.1);
-    //point_start_y = double(pStartY.data) * (-0.1);
-    //point_end_x = double(pEndX.data) * (-0.1);
-    //point_end_y = double(pEndY.data) * (-0.1);
+    point_start_x = double(pStartX.data) * (-0.1);
+    point_start_y = double(pStartY.data) * (-0.1);
+    point_end_x = double(pEndX.data) * (-0.1);
+    point_end_y = double(pEndY.data) * (-0.1);
 }
 
 /// extract path
