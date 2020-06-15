@@ -1,0 +1,63 @@
+[33mf2fc1c4[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m wyswietlani wykresu uczenia
+[33m911e0ec[m prepocesing greyscale, dodana walidacja
+[33m1fcedca[m prosty skrypt do trenowania
+[33m9cf9875[m Merge branch 'master' of https://github.com/Kamilkim/mapr_project
+[33mf56e3c2[m dodane bloki rezydualne
+[33m25d2aaf[m normalizacja obrazu
+[33m0d67a8b[m Update Python3.7&PyTorch_installation
+[33m445af9c[m pogrubione ścieżki, 64x64 pix
+[33m126b382[m zdjecia przygotowane dla sieci
+[33mb0ed116[m usuniety szablon
+[33m259af07[m tworzenie danych uczących
+[33md212284[m szablon sieci unet
+[33mbd2ba95[m dane treningowe
+[33m0da439c[m interpolacja sciezki
+[33m41f3f95[m pogrubione ścieżki
+[33m7abc1eb[m nowe zdjęcia
+[33me6a83a6[m usunięte punkty z obrazu
+[33m54efd1f[m zmieniona rozdzielczość planera
+[33m5ab08e5[m optymalizacja drogi
+[33mdf5e73b[m Update mapr_project.cpp
+[33m65df44a[m dodana biblioteka Cost
+[33m54ed6da[m dodana biblioteka Cost
+[33m427972b[m Update Python3.7&PyTorch_installation
+[33mff0b028[m poprawiona literówka
+[33m1948542[m przykładowy skrypt
+[33md5b95fd[m instalacja i konfiguracja pytorch
+[33m5685c83[m nowa mapa o wymiarach 6X6 przesunieta -3X i -3Y
+[33m1a11371[m zdjęcia ze ścieżkami
+[33m8054463[m zmieniona częstotliwość subskrypcji
+[33m961f71b[m dodane rysowanie ścieżki na obrazie
+[33m1f2d3bd[m zmiana nazwy topica
+[33m042095a[m usunięty printf
+[33m446dac0[m dodana subskrypcja punktów
+[33mf53ba1a[m punkty startowy i końcowy dodane do konfiguracji planera, konfiguracja przed każdym planowaniem ścieżki
+[33mff92436[m dodana funkcja do odczytu punktów startowych i koncowych
+[33md7d02d5[m ustawilem granice, punkt start i stop w obszarze mapy i wirtualna przeszkode
+[33m87754dc[m Update README.md
+[33mdc01301[m wyswietlaniesciezki z mapa
+[33m4143bbe[m nowe foto
+[33mba0ccae[m skrocona nazwa projektu
+[33m0bbb4af[m Update README.md
+[33m74a270c[m zmieniona nazwa pliku
+[33mca90389[m dodany folder images
+[33m8d44513[m losowanie plikow startowego i poczatkowego, tworzenie obrazow
+[33m1699e6a[m poprawione sciezki w plikach lauch
+[33m7d12c9e[m dodany plik lunch ktory uruchamia OMPL node
+[33m0d881d1[m Merge branch 'master' of https://github.com/Kamilkim/MAPR_elevation_map_project
+[33m6ad71bb[m sybsykrypcja mapy
+[33m3c36259[m Update README.md
+[33m279c9c7[m edited ros command
+[33md49d181[m poprawiony URL
+[33m1494130[m dodane zdjecie do pliku readme
+[33m74a02c2[m dodane zdjecie mapy
+[33m478b4af[m poprawiona nazwa rosbaga
+[33m68fc6eb[m dwu minutowy rosbag
+[33mcd06506[m test
+[33m829326c[m test
+[33m10c04d8[m test
+[33m8bd4124[m test
+[33m2872ce4[m Delete ompl_example_2d.hpp
+[33m0039710[m Add files via upload
+[33mc03fb48[m Delete README.md
+[33m1c64f72[m Initial commit
