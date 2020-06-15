@@ -44,10 +44,18 @@ $ roslaunch mapr_project mapr_project_ompl.launch
 ![Mapa](https://github.com/Kamilkim/mapr_project/blob/master/doc/elevation_map_points.JPG)
 
 3. Szukanie sciezki - do wyszukiwania sciezki zostal uzyty algotyrm RRT* z biblioteki OMPL, dodatkowo sciezka jest optymalizowana pod wzgledem kosztu, ktorym jest wysokosc na mapie w danym punktcie. Do optymalizacji kosztu uzyto rowniez elementu biblioteki OMPL - Optimization Objectives
-https://ompl.kavrakilab.org/optimizationObjectivesTutorial.html. Node planera subskrubej mape z rosbaga i losawane punkty, nastepnie wyszukuje sciezke i publikuje ja w topiku.
+https://ompl.kavrakilab.org/optimizationObjectivesTutorial.html. Node planera subskrybuje mape z rosbaga i losawane punkty z topika, nastepnie wyszukuje sciezke i publikuje ja w topiku.
 
 ![Mapa](https://github.com/Kamilkim/mapr_project/blob/master/doc/elevation_map_path.JPG)
 
+
+4. Node z planerem jest uruchamiany co sekunde.
 ![Mapa](https://github.com/Kamilkim/mapr_project/blob/master/doc/planning.gif)
+
+Punkty startowy i koncowy sa zapisywane jako zdjecie. Po znalezieniu sciezki rowniez ona zapisywana jest jako zdjecie. 
+
+![Mapa](https://github.com/Kamilkim/mapr_project/blob/master/doc/data_point.png)
+![Mapa](https://github.com/Kamilkim/mapr_project/blob/master/doc/data_path.png)
+
 
 
