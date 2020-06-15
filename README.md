@@ -10,15 +10,9 @@ $ pip install pathlib
 
 # Installation
 
-$ cd ~/catkin_ws/src
-
-$ git clone https://github.com/ANYbotics/elevation_mapping
-
 $ sudo apt-get update
 
-$ git clone https://github.com/ANYbotics/kindr.git
-
-$ git clone https://github.com/ANYbotics/kindr_ros.git
+$ cd ~/catkin_ws/src
 
 $ git clone https://github.com/Kamilkim/mapr_project.git
 
@@ -30,11 +24,13 @@ $ source devel_isolated/setup.bash
 
 # Run example
 
-$ roslaunch mapr_project mapr_project.launch
+$ roslaunch mapr_project mapr_project_ompl.launch
 
 # Tasks
 
-1. run elevaiotn map
+1. Generowanie mapy - na podstawie informacji z repozytorium https://github.com/ANYbotics/grid_map zostal napisany skrypt elevMap_create.py, ktory generuje mape wysokosciowa (widoczna ponizej) o wymiarach 64x64 piksele
+
+![Mapa](https://github.com/Kamilkim/mapr_project/blob/master/doc/elevation_map.JPG)
 
 2. in the new terminal run script 
 
@@ -42,4 +38,4 @@ $ roslaunch mapr_project mapr_project.launch
 
 3. add topic "reflected_map" in rviz
 
-![Mapa](https://github.com/Kamilkim/mapr_project/blob/master/doc/Elevation_map.JPG)
+
