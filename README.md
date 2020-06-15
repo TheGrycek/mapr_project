@@ -54,7 +54,7 @@ https://ompl.kavrakilab.org/optimizationObjectivesTutorial.html. Node planera su
 <img src="doc/elevation_map_path.JPG">
 </p>
 
-4. Zapis mapy - Node z planerem jest uruchamiany co sekunde i co sekunde sa subskybowane nowe punkty i wyszukiwana miedzy nimi sciezka.
+4. Zapis mapy - Node z planerem jest uruchamiany co sekunde i z taka czestotliwoscia m sa subskybowane nowe punkty i wyszukiwana miedzy nimi sciezka.
 
 
 <p align="center"> 
@@ -66,10 +66,10 @@ Punkty startowy i koncowy sa zapisywane jako zdjecie. Po znalezieniu sciezki row
 5. Model sieci neurownej
 
 <p align="left"> 
-<img src="doc/data_point.png" width="256px" height="256px">
+<img src="doc/data_point.png" width="128px" height="128px">
 </p>
 <p align="right"> 
-<img src="doc/data_path.png" width="256px" height="256px">
+<img src="doc/data_path.png" width="128px" height="128px">
 </p>
 
 
