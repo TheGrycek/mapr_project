@@ -35,26 +35,26 @@ $ roslaunch mapr_project mapr_project_ompl.launch
 
 # Tasks
 
-1. Generowanie mapy - na podstawie informacji z repozytorium https://github.com/ANYbotics/grid_map zostal napisany skrypt elevMap_create.py, ktory generuje mape wysokosciowa (widoczna ponizej) o wymiarach 64x64 piksele. Mapa nastepnie zostala zapisana do rosbaga.
+### 1. Generowanie mapy - na podstawie informacji z repozytorium https://github.com/ANYbotics/grid_map zostal napisany skrypt elevMap_create.py, ktory generuje mape wysokosciowa (widoczna ponizej) o wymiarach 64x64 piksele. Mapa nastepnie zostala zapisana do rosbaga.
 
 <p align="center"> 
 <img src="doc/elevation_map.JPG">
 </p>
 
-2. Losowanie startu i mety - skrypt subsykrybuje mape wysokosciowa z uruchomionego rosbaga i losuje na jej powierzchn dwa punkty startowy i koncowy. Zostalo dodane ogranicze ktore powoduje, ze punkty nie moga byc wylosowane blizej siebie wiecej niz na 5 pikseli. Nastepnie punkty sa publikowane w topiku.
+### 2. Losowanie startu i mety - skrypt subsykrybuje mape wysokosciowa z uruchomionego rosbaga i losuje na jej powierzchn dwa punkty startowy i koncowy. Zostalo dodane ogranicze ktore powoduje, ze punkty nie moga byc wylosowane blizej siebie wiecej niz na 5 pikseli. Nastepnie punkty sa publikowane w topiku.
 
 <p align="center"> 
 <img src="doc/elevation_map_points.JPG">
 </p>
 
-3. Szukanie sciezki - do wyszukiwania sciezki zostal uzyty algotyrm RRT* z biblioteki OMPL, dodatkowo sciezka jest optymalizowana pod wzgledem kosztu, ktorym jest wysokosc na mapie w danym punktcie. Do optymalizacji kosztu uzyto rowniez elementu biblioteki OMPL - Optimization Objectives
+### 3. Szukanie sciezki - do wyszukiwania sciezki zostal uzyty algotyrm RRT* z biblioteki OMPL, dodatkowo sciezka jest optymalizowana pod wzgledem kosztu, ktorym jest wysokosc na mapie w danym punktcie. Do optymalizacji kosztu uzyto rowniez elementu biblioteki OMPL - Optimization Objectives
 https://ompl.kavrakilab.org/optimizationObjectivesTutorial.html. Node planera subskrybuje mape z rosbaga i losawane punkty z topika, nastepnie wyszukuje sciezke i publikuje ja w topiku.
 
 <p align="center"> 
 <img src="doc/elevation_map_path.JPG">
 </p>
 
-4. Zapis mapy - Node z planerem jest uruchamiany co sekunde i z taka czestotliwoscia m sa subskybowane nowe punkty i wyszukiwana miedzy nimi sciezka.
+### 4. Zapis mapy - Node z planerem jest uruchamiany co sekunde i z taka czestotliwoscia m sa subskybowane nowe punkty i wyszukiwana miedzy nimi sciezka.
 
 
 <p align="center"> 
@@ -68,20 +68,20 @@ Punkty startowy i koncowy sa zapisywane jako zdjecie. Po znalezieniu sciezki row
 <img src="doc/data_path.png" width="256px" height="256px">
 </p>
 
-5. Model sieci neurownej - do tego problemu zostala wybrana siec konwolucyjna U-net o strukturze widocznej ponizej. Model sieci zostal zaimplementowany z uzyciem biblioteki PyTorch.
+### 5. Model sieci neurownej - do tego problemu zostala wybrana siec konwolucyjna U-net o strukturze widocznej ponizej. Model sieci zostal zaimplementowany z uzyciem biblioteki PyTorch.
 
 <p align="center"> 
 <img src="doc/Model_sieci.PNG">
 </p>
 
-6. Rezulta uczenia sieci 
+### 6. Rezulta uczenia sieci 
 
 <p align="center"> 
 <img src="doc/1000probek_4epoki.png">
 </p>
 
 <p align="center"> 
-<img src="doc/6000probek_8epoki.png">
+<img src="doc/6000probek_8epok.png">
 </p>
 
 
