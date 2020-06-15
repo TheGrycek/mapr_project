@@ -46,18 +46,17 @@ $ roslaunch mapr_project mapr_project_ompl.launch
 3. Szukanie sciezki - do wyszukiwania sciezki zostal uzyty algotyrm RRT* z biblioteki OMPL, dodatkowo sciezka jest optymalizowana pod wzgledem kosztu, ktorym jest wysokosc na mapie w danym punktcie. Do optymalizacji kosztu uzyto rowniez elementu biblioteki OMPL - Optimization Objectives
 https://ompl.kavrakilab.org/optimizationObjectivesTutorial.html. Node planera subskrybuje mape z rosbaga i losawane punkty z topika, nastepnie wyszukuje sciezke i publikuje ja w topiku.
 
-![Mapa](https://github.com/Kamilkim/mapr_project/blob/master/doc/elevation_map_path.JPG)
+![](doc/elevation_map_path.JPG)
 
 
-4. Node z planerem jest uruchamiany co sekunde i co sekunde sa subskybowane nowe punkty i wyszukiwana miedzy nimi sciezka.
+4. Zapis mapy - Node z planerem jest uruchamiany co sekunde i co sekunde sa subskybowane nowe punkty i wyszukiwana miedzy nimi sciezka.
 
-<p align="center">
 
 ![Mapa](https://github.com/Kamilkim/mapr_project/blob/master/doc/planning.gif)
 
-</p>
+Punkty startowy i koncowy sa zapisywane jako zdjecie. Po znalezieniu sciezki rowniez ona zapisywana jest jako zdjecie. Zbior par zdjec (punktow i sciezek) zostal wykorzystany do uczenia sieci neuronowej, ktora nasladuje uzyty algorytm trasowania sciezki.
 
-Punkty startowy i koncowy sa zapisywane jako zdjecie. Po znalezieniu sciezki rowniez ona zapisywana jest jako zdjecie. 
+5. 
 
 ![Mapa](https://github.com/Kamilkim/mapr_project/blob/master/doc/data_point.png)
 ![Mapa](https://github.com/Kamilkim/mapr_project/blob/master/doc/data_path.png)
