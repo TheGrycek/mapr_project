@@ -49,8 +49,13 @@ https://ompl.kavrakilab.org/optimizationObjectivesTutorial.html. Node planera su
 ![Mapa](https://github.com/Kamilkim/mapr_project/blob/master/doc/elevation_map_path.JPG)
 
 
-4. Node z planerem jest uruchamiany co sekunde.
+4. Node z planerem jest uruchamiany co sekunde i co sekunde sa subskybowane nowe punkty i wyszukiwana miedzy nimi sciezka.
+
+<p align="center">
+
 ![Mapa](https://github.com/Kamilkim/mapr_project/blob/master/doc/planning.gif)
+
+</p>
 
 Punkty startowy i koncowy sa zapisywane jako zdjecie. Po znalezieniu sciezki rowniez ona zapisywana jest jako zdjecie. 
 
