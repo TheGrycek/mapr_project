@@ -24,7 +24,14 @@ $ source devel_isolated/setup.bash
 
 # Run example
 
+Uruchomienie mapy:
+
+$ roslaunch mapr_project mapr_project.launch
+
+Uruchomienie mapy z rysowaniem sciezki
+
 $ roslaunch mapr_project mapr_project_ompl.launch
+
 
 # Tasks
 
@@ -32,9 +39,7 @@ $ roslaunch mapr_project mapr_project_ompl.launch
 
 ![Mapa](https://github.com/Kamilkim/mapr_project/blob/master/doc/elevation_map.JPG)
 
-2. in the new terminal run script 
-
-    $ rosrun mapr_project elevMapExample.py
+2. Losowanie start i mety - napisany zostal skrypt ktory losuje na powierzchni mapy dwa punkty startowy i koncowy. Zostalo dodane ogranicze ktore powoduje, ze punkty nie moga byc blizej siebie wiecej niz na 5 pikseli. Nastepnie punkty sa publikowane w topiku.
 
 3. add topic "reflected_map" in rviz
 
