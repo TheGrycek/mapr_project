@@ -63,12 +63,27 @@ https://ompl.kavrakilab.org/optimizationObjectivesTutorial.html. Node planera su
 
 Punkty startowy i koncowy sa zapisywane jako zdjecie. Po znalezieniu sciezki rowniez ona zapisywana jest jako zdjecie. Zbior par zdjec (punktow i sciezek) zostal wykorzystany do uczenia sieci neuronowej, ktora nasladuje uzyty algorytm trasowania sciezki.
 
-5. Model sieci neurownej
-
 <p align="center"> 
 <img src="doc/data_point.png" width="256px" height="256px">
 <img src="doc/data_path.png" width="256px" height="256px">
 </p>
+
+5. Model sieci neurownej - do tego problemu zostala wybrana siec konwolucyjna U-net o strukturze widocznej ponizej. Model sieci zostal zaimplementowany z uzyciem biblioteki PyTorch.
+
+<p align="center"> 
+<img src="doc/Model_sieci.png">
+
+</p>
+
+5. Rezulta uczenia sieci 
+
+<p align="center"> 
+<img src="doc/1000probek_4epoki.png" title="Optional title">
+
+</p>
+
+
+
 
 
 
