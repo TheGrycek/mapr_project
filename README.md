@@ -102,7 +102,7 @@ Ponizej przedstwaiono kolejno: wykres bledu sieci neuronowej w zaleznosci od cza
 <img src="doc/Accuracy_figure.png">
 </p>
 
-### 6. Testowanie sieci 
+### 7. Testowanie sieci 
 Do testowania sieci wygenerowany zostal osobny zestaw obrazow. Z uwagi na to, ze siec nie jest do konca poprawnie nauczona, na obrazy wyjciowe z sieci neuronowej nalozono dodatkowe filtry, aby zwiekszyc kontrast miedzy tlem (mapa), a sciezka. Zgodnosc obrazow referencyjnych z obrazami zwroconymi przez siec dla zestawu treningowego jest na poziomie 94 %.
 
 <p align="center"> 
