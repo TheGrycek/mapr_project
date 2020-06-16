@@ -91,8 +91,8 @@ Uczenie sieci przeprowadzono kilkukrotnie, jednak z uwagi na slabe mozliwosci ob
 <img src="doc/6000probek_8epok.png">
 </p>
 
-Dla zestawu walidacyjnego zgodnosc obrazow referencyjnych z obrazami zwroconymi przez siec neuronowa (dla zestawu uczacego z 10000 probkami) wyniosla 96 %.
-Ponizej przedstwaiono kolejno: wykres bledu sieci neuronowej w zaleznosci od czasu, dokladnosc odwzorowania obrazow referencyjnych w zaleznosci od epoki. Oba wykresy wyznaczono dla zestawu z 60000 probek.
+Dla zestawu walidacyjnego zgodnosc obrazow referencyjnych z obrazami zwroconymi przez siec neuronowa wyniosla 96 % (dla uczenia 6000 probek i 8 epok).
+Ponizej przedstwaiono kolejno: wykres bledu sieci neuronowej w zaleznosci od czasu, dokladnosc odwzorowania obrazow referencyjnych w zaleznosci od epoki.
 
 <p align="center"> 
 <img src="doc/Loss_figure.png">
@@ -103,7 +103,7 @@ Ponizej przedstwaiono kolejno: wykres bledu sieci neuronowej w zaleznosci od cza
 </p>
 
 ### 6. Testowanie sieci 
-Do testowania sieci wygenerowany zostal osobny zestaw obrazow. Z uwagi na to, ze siec nie jest do konca poprawnie nauczona, na obrazy wyjciowe z sieci neuronowej nalozono dodatkowe filtry, aby zwiekszyc kontrast miedzy tlem (mapa), a sciezka. Zgodnosc obrazow referencyjnych z obrazami zwroconymi przez siec dla zestawu treningowego jest na poziomie 94 %
+Do testowania sieci wygenerowany zostal osobny zestaw obrazow. Z uwagi na to, ze siec nie jest do konca poprawnie nauczona, na obrazy wyjciowe z sieci neuronowej nalozono dodatkowe filtry, aby zwiekszyc kontrast miedzy tlem (mapa), a sciezka. Zgodnosc obrazow referencyjnych z obrazami zwroconymi przez siec dla zestawu treningowego jest na poziomie 94 %.
 
 <p align="center"> 
 <img src="doc/Testing.png">
