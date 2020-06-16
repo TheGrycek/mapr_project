@@ -8,6 +8,8 @@ $ sudo apt-get install ros-melodic-grid-map
 
 $ pip install pathlib
 
+$ pip install tqdm
+
 # Installation
 
 $ sudo apt-get update
@@ -42,8 +44,8 @@ Na podstawie informacji z repozytorium https://github.com/ANYbotics/grid_map zos
 <img src="doc/elevation_map.JPG">
 </p>
 
-### 2. Losowanie startu i mety 
-Skrypt subsykrybuje mape wysokosciowa z uruchomionego rosbaga i losuje na jej powierzchn dwa punkty startowy i koncowy. Zostalo dodane ogranicze ktore powoduje, ze punkty nie moga byc wylosowane blizej siebie wiecej niz na 5 pikseli. Nastepnie punkty sa publikowane w topiku.
+### 2. Losowanie punktu startowego i końcowego
+Skrypt subsykrybuje mape wysokosciowa z uruchomionego rosbaga i losuje na jej powierzchn dwa punkty- startowy i koncowy. Dodane ograniczenie powoduje, ze punkty wostają wylosowane w odległści nie mniejszej niż 10 pikseli. Nastepnie punkty te sa publikowane w topiku.
 
 <p align="center"> 
 <img src="doc/elevation_map_points.JPG">
@@ -60,12 +62,11 @@ https://ompl.kavrakilab.org/optimizationObjectivesTutorial.html. Node planera su
 ### 4. Zapis mapy 
 Node z planerem jest uruchamiany co sekunde i z taka czestotliwoscia sa subskybowane nowe punkty i wyszukiwana miedzy nimi sciezka.
 
-
 <p align="center"> 
 <img src="doc/planning.gif">
 </p>
 
-Punkty startowy i koncowy sa zapisywane jako zdjecie, po znalezieniu sciezki rowniez ona zostaje zapisana w formacie obrazu. Zbior par zdjec (punktow i sciezki) zostal wykorzystany do uczenia sieci neuronowej, ktora nasladuje uzyty algorytm trasowania sciezki.
+Punkty startowy i koncowy sa zapisywane jako zdjecie, po znalezieniu sciezki rowniez ona zostaje zapisana w formacie obrazu. Zakres jasności pikseli należących do mapy miesci sie w zakresie od 30 do 255, natomiast piksele nalezace do sciezki maja wartosc 0. Zbior par zdjec (punktow i sciezki) zostal wykorzystany do uczenia sieci neuronowej, ktora nasladuje uzyty algorytm trasowania sciezki.
 
 <p align="center"> 
 <img src="doc/data_point.png" width="256px" height="256px">
@@ -79,7 +80,8 @@ Do rozwiazana problemu zostala wybrana siec konwolucyjna U-net o strukturze wido
 <img src="doc/Model_sieci.PNG">
 </p>
 
-### 6. Rezulta uczenia sieci 
+### 6. Uczenie sieci 
+Uczenie sieci przeprowadzono kilkukrotnie, jednak z uwagi na slabe mozliwosci obliczeniowe, udalo sie uzyskac jedynie 2 obiecujace modele- jeden dla uczenia zestawem z 10000 probek przez 4 epoki, drugi dla 6000 probek przez 8 epok. Jako warunek zatrzymania uczenia ustawiono zgodnosc obrazow referencyjnych (z zestawu walidacyjnego) z obrazami wyjsciowymi sieci na pozomie nie niższym niż 97%.
 
 <p align="center"> 
 <img src="doc/1000probek_4epoki.png">
@@ -89,10 +91,23 @@ Do rozwiazana problemu zostala wybrana siec konwolucyjna U-net o strukturze wido
 <img src="doc/6000probek_8epok.png">
 </p>
 
+Dla zestawu walidacyjnego zgodnosc obrazow referencyjnych z obrazami zwroconymi przez siec neuronowa (dla zestawu uczacego z 10000 probkami) wyniosla 96 %.
+Ponizej przedstwaiono kolejno: wykres bledu sieci neuronowej w zaleznosci od czasu, dokladnosc odwzorowania obrazow referencyjnych w zaleznosci od epoki. Oba wykresy wyznaczono dla zestawu z 60000 probek.
 
+<p align="center"> 
+<img src="doc/Loss_figure.png">
+</p>
 
+<p align="center"> 
+<img src="doc/Accuracy_figure.png">
+</p>
 
+### 6. Testowanie sieci 
+Do testowania sieci wygenerowany zostal osobny zestaw obrazow. Z uwagi na to, ze siec nie jest do konca poprawnie nauczona, na obrazy wyjciowe z sieci neuronowej nalozono dodatkowe filtry, aby zwiekszyc kontrast miedzy tlem (mapa), a sciezka. Zgodnosc obrazow referencyjnych z obrazami zwroconymi przez siec dla zestawu treningowego jest na poziomie 94 %
 
+<p align="center"> 
+<img src="doc/Testing.png">
+</p>
 
 
 
