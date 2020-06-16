@@ -73,7 +73,7 @@ Punkty startowy i koncowy sa zapisywane jako zdjecie, po znalezieniu sciezki row
 <img src="doc/data_path.png" width="256px" height="256px">
 </p>
 
-### 5. Model sieci neurownej 
+### 5. Model sztucznej sieci neuronowej 
 Do rozwiazana problemu zostala wybrana siec konwolucyjna U-net o strukturze widocznej ponizej. Model sieci zostal zaimplementowany z uzyciem biblioteki PyTorch. Wejsciem sieci jest obraz mapy wysokosciowej w skali szarosci z zaznaczonymi na czarno dwoma punktami (startowy i koncowy). Wynikiem sieci jest obraz mapy wysokosciowej z narysowana siezka pomiedzy punktami.
 
 <p align="center"> 
