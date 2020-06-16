@@ -1,9 +1,3 @@
-# elevMap_start_end.py
-#
-#  Created on: June 15, 2020
-#      Author: Kamil Miedzinski Mateusz Grycmacher
-#	 Institute: Instute of Home, Poznan University of Technology
-
 #!/usr/bin/env python
 import rospy
 import random as rd
