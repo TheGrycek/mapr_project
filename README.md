@@ -81,7 +81,7 @@ Do rozwiazana problemu zostala wybrana siec konwolucyjna U-net o strukturze wido
 </p>
 
 ### 6. Uczenie sieci 
-Uczenie sieci przeprowadzono kilkukrotnie, jednak z uwagi na slabe mozliwosci obliczeniowe, udalo sie uzyskac jedynie 2 obiecujace modele- jeden dla uczenia zestawem z 10000 probek przez 4 epoki, drugi dla 6000 probek przez 8 epok. Jako warunek zatrzymania uczenia ustawiono zgodnosc obrazow referencyjnych (z zestawu walidacyjnego) z obrazami wyjsciowymi sieci na pozomie nie niższym niż 97%.
+Uczenie sieci przeprowadzono kilkukrotnie, jednak z uwagi na slabe mozliwosci obliczeniowe, udalo sie uzyskac jedynie 2 obiecujace modele- jeden dla uczenia zestawem posiadajacym 10000 probek przez 4 epoki, drugi dla 6000 probek przez 8 epok. Jako warunek zatrzymania uczenia ustawiono zgodnosc obrazow referencyjnych (z zestawu walidacyjnego) z obrazami wyjsciowymi sieci na pozomie nie niższym niż 97%.
 
 <p align="center"> 
 <img src="doc/1000probek_4epoki.png">
