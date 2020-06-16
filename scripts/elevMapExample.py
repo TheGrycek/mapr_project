@@ -1,9 +1,3 @@
-# elevMapExample.py
-#
-#  Created on: June 15, 2020
-#      Author: Kamil Miedzinski Mateusz Grycmacher
-#	 Institute: Instute of Home, Poznan University of Technology
-
 #!/usr/bin/env python
 import rospy
 from grid_map_msgs import msg # import occupancy grid data
