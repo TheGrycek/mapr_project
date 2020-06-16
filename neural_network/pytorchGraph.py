@@ -1,45 +1,41 @@
 import matplotlib.pyplot as plt
 from matplotlib import style
 
-style.use("ggplot")
+def create_acc_loss_graph(file_name):
 
-model_name = "model-1591707724" # grab whichever model name you want here. We could also just reference the MODEL_NAME if you're in a notebook still.
-
-
-def create_acc_loss_graph(model_name):
-    contents = open("model.log", "r").read().split("\n")
+    style.use("ggplot")
+    contents = open(file_name, "r").read().split("\n")
+    model_name = contents[0][0:16]
 
     times = []
     accuracies = []
     losses = []
-
-    val_accs = []
-    val_losses = []
+    epochs = []
 
     for c in contents:
         if model_name in c:
-            name, timestamp, acc, loss, val_acc, val_loss, epoch = c.split(",")
+            name, timestamp, acc, loss, epoch = c.split(",")
 
             times.append(float(timestamp))
-            accuracies.append(float(acc))
             losses.append(float(loss))
 
-            val_accs.append(float(val_acc))
-            val_losses.append(float(val_loss))
+            if int(epoch) not in epochs:
+                epochs.append(int(epoch))
+                accuracies.append(float(acc))
 
+    fig1 = plt.figure()
 
-    fig = plt.figure()
+    plt.plot(epochs, accuracies, label="acc")
+    fig1.legend(loc=2)
+    plt.xlabel('epochs')
+    plt.ylabel('accuracy')
 
-    ax1 = plt.subplot2grid((2,1), (0,0))
-    ax2 = plt.subplot2grid((2,1), (1,0), sharex=ax1)
-
-
-    ax1.plot(times, accuracies, label="acc")
-    ax1.plot(times, val_accs, label="val_acc")
-    ax1.legend(loc=2)
-    ax2.plot(times,losses, label="loss")
-    ax2.plot(times,val_losses, label="val_loss")
-    ax2.legend(loc=2)
+    fig2 = plt.figure()
+    plt.plot(times, losses, label="loss")
+    fig2.legend(loc=2)
+    plt.xlabel('timestamp')
+    plt.ylabel('loss')
     plt.show()
 
-create_acc_loss_graph(model_name)
+
+create_acc_loss_graph("model_6000.log")

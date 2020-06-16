@@ -3,9 +3,6 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torchsummary import summary
 import torch.optim as optim
-import numpy as np
-from torch.utils.data.dataset import random_split
-
 
 class Layer(nn.Module):
 
@@ -47,7 +44,7 @@ class Layer(nn.Module):
 
 
 class Unet(nn.Module):
-    def __init__(self, img_size=60, input_size=1, output_size=1, first_filter_size=64, kernel_size=3, padding=1):
+    def __init__(self, img_size=64, input_size=1, output_size=1, first_filter_size=64, kernel_size=3, padding=1):
         super().__init__()
         self.img_size = img_size
         self.input_size = input_size
@@ -67,7 +64,7 @@ class Unet(nn.Module):
         self.conv7 = Layer(first_filter_size * 2 ** 3 + first_filter_size * 2 ** 2, first_filter_size * 2 ** 2)
         self.conv8 = Layer(first_filter_size * 2 ** 2 + first_filter_size * 2 ** 1, first_filter_size * 2 ** 1)
         self.conv9 = Layer(first_filter_size * 2 ** 1 + first_filter_size * 2 ** 0, first_filter_size * 2 ** 0)
-        self.conv10 = Layer(first_filter_size * 2 ** 0, output_size, residual=False)
+        self.conv10 = Layer(first_filter_size * 2 ** 0, output_size, residual=True)
 
     def forward(self, input_data):
         output_data0 = self.conv1(input_data)
