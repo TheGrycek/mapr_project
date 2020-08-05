@@ -37,51 +37,50 @@ $ roslaunch mapr_project mapr_project_ompl.launch
 
 # Tasks
 
-### 1. Generowanie mapy 
-Na podstawie informacji z repozytorium https://github.com/ANYbotics/grid_map zostal napisany skrypt elevMap_create.py, ktory generuje mape wysokosciowa (widoczna ponizej) o wymiarach 64x64 piksele. Mapa nastepnie zostala zapisana do rosbaga.
+### 1. Map generation
+Based on the information from the https://github.com/ANYbotics/grid_map repository, script generating 64x64 pixels shape elevation map was written. Subsequently map was saved to rosbag file.
 
 <p align="center"> 
 <img src="doc/elevation_map.JPG">
 </p>
 
-### 2. Losowanie punktu startowego i końcowego
-Skrypt subsykrybuje mape wysokosciowa z uruchomionego rosbaga i losuje na jej powierzchn dwa punkty- startowy i koncowy. Dodane ograniczenie powoduje, ze punkty wostają wylosowane w odległści nie mniejszej niż 10 pikseli. Nastepnie punkty te sa publikowane w topiku.
+### 2. Drawing a starting and ending point
+The scpipt sbscribes the elevation map from launched rosbag and draws two points on its surface - starting and ending point. Added restrictions cousing, that distance between tossed poinst is greater than 10 pxsels. Next those points are published into topic.
 
 <p align="center"> 
 <img src="doc/elevation_map_points.JPG">
 </p>
 
-### 3. Szukanie sciezki 
-Do wyszukiwania sciezki zostal uzyty algotyrm RRT* z biblioteki OMPL, dodatkowo sciezka jest optymalizowana pod wzgledem kosztu, ktorym jest wysokosc na mapie w danym punktcie. Do optymalizacji kosztu uzyto rowniez elementu biblioteki OMPL - Optimization Objectives
-https://ompl.kavrakilab.org/optimizationObjectivesTutorial.html. Node planera subskrybuje mape z rosbaga i losawane punkty z topika, nastepnie wyszukuje sciezke i publikuje ja w topiku.
+### 3. Path finding
+For path finding RRT* algorythm form OMPL library was used, additionally path was optimized in terms of cost, which is the elevation value on map at a given point. For cost optimization Optimization Objectives https://ompl.kavrakilab.org/optimizationObjectivesTutorial.html module was used. The planner node subsribes map from rosbag and randomly selects points form the topic, then finds and subscribes path into topic.
 
 <p align="center"> 
 <img src="doc/elevation_map_path.JPG">
 </p>
 
-### 4. Zapis mapy 
-Node z planerem jest uruchamiany co sekunde i z taka czestotliwoscia sa subskybowane nowe punkty i wyszukiwana miedzy nimi sciezka.
+### 4. Map saving
+Node with planner is launched every second and with this frequency new points and fouded path are subscribed.
 
 <p align="center"> 
 <img src="doc/planning.gif">
 </p>
 
-Punkty startowy i koncowy sa zapisywane jako zdjecie, po znalezieniu sciezki rowniez ona zostaje zapisana w formacie obrazu. Zakres jasności pikseli należących do mapy miesci sie w zakresie od 30 do 255, natomiast piksele nalezace do sciezki maja wartosc 0. Zbior par zdjec (punktow i sciezki) zostal wykorzystany do uczenia sieci neuronowej, ktora nasladuje uzyty algorytm trasowania sciezki.
+Start and end points are saved as pictutres. Once path is found, it is also saved as an image file.  The brightnes value of pixels belonging to the map ranges from 30 to 255,while pixels belonging to the path have a value of 0. A set of images pairs (images with points and with paths) was used for neural network learning (which mimics RRT* algorythm).
 
 <p align="center"> 
 <img src="doc/data_point.png" width="256px" height="256px">
 <img src="doc/data_path.png" width="256px" height="256px">
 </p>
 
-### 5. Model sztucznej sieci neuronowej 
-Do rozwiazana problemu zostala wybrana siec konwolucyjna U-net o strukturze widocznej ponizej. Model sieci zostal zaimplementowany z uzyciem biblioteki PyTorch. Wejsciem sieci jest obraz mapy wysokosciowej w skali szarosci z zaznaczonymi na czarno dwoma punktami (startowy i koncowy). Wynikiem sieci jest obraz mapy wysokosciowej z narysowana siezka pomiedzy punktami.
+### 5. Neural network model
+To solve given problem convolution U-net (seen below) was choose. Network model was implemented with help of PyTorch library. Network input is an elevation map image in grayscale with with drawn two points (start and end). Output is an  image of elevation map with drawn path.
 
 <p align="center"> 
 <img src="doc/Model_sieci.PNG">
 </p>
 
-### 6. Uczenie sieci 
-Uczenie sieci przeprowadzono kilkukrotnie, jednak z uwagi na slabe mozliwosci obliczeniowe, udalo sie uzyskac jedynie 2 obiecujace modele- jeden dla uczenia zestawem posiadajacym 10000 probek przez 4 epoki, drugi dla 6000 probek przez 8 epok. Jako warunek zatrzymania uczenia ustawiono zgodnosc obrazow referencyjnych (z zestawu walidacyjnego) z obrazami wyjsciowymi sieci na pozomie nie niższym niż 97%.
+### 6. Neural network training 
+Neural network training was conducted repeatedly, but due to poor computational capacity, only 2 promising models were obtained - first for training with a set containing 1000 samples for 4 epochs, second for 6000 samples set for 8 epochs. As stop condition, the similatity between reference images and output images at 97% level was set.
 
 <p align="center"> 
 <img src="doc/1000probek_4epoki.png">
@@ -91,8 +90,8 @@ Uczenie sieci przeprowadzono kilkukrotnie, jednak z uwagi na slabe mozliwosci ob
 <img src="doc/6000probek_8epok.png">
 </p>
 
-Dla zestawu walidacyjnego zgodnosc obrazow referencyjnych z obrazami zwroconymi przez siec neuronowa wyniosla 96 % (dla uczenia 6000 probek i 8 epok).
-Ponizej przedstwaiono kolejno: wykres bledu sieci neuronowej w zaleznosci od czasu, dokladnosc odwzorowania obrazow referencyjnych w zaleznosci od epoki.
+For the validation set, the similarity between reference images and output images reached 96% (for 6000 samples and 8 epochs). 
+Beneath network error chart in relation to time and images projection accuracy chart in relation to epochs were presented.
 
 <p align="center"> 
 <img src="doc/Loss_figure.png">
@@ -102,8 +101,8 @@ Ponizej przedstwaiono kolejno: wykres bledu sieci neuronowej w zaleznosci od cza
 <img src="doc/Accuracy_figure.png">
 </p>
 
-### 7. Testowanie sieci 
-Do testowania sieci wygenerowany zostal osobny zestaw obrazow. Z uwagi na to, ze siec nie jest do konca poprawnie nauczona, na obrazy wyjciowe z sieci neuronowej nalozono dodatkowe filtry, aby zwiekszyc kontrast miedzy tlem (mapa), a sciezka. Zgodnosc obrazow referencyjnych z obrazami zwroconymi przez siec dla zestawu treningowego jest na poziomie 94 %.
+### 7. Neural network testing
+For network testing, a separate imagees set was generated. Due to the fact that the network was not copletely learned, additional filters were aplied to the output images to increase the contrast between the background (map) and the path. The similarity of the reference images with the images returned by the network got the level of 94%.
 
 <p align="center"> 
 <img src="doc/Tesing.png">
