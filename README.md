@@ -1,7 +1,7 @@
 # mapr_project
 
 # Dependencies:
-
+```
 $ sudo apt-get install ros-melodic-map-server ros-melodic-dwa-local-planner libompl-dev
 
 $ sudo apt-get install ros-melodic-grid-map
@@ -9,9 +9,9 @@ $ sudo apt-get install ros-melodic-grid-map
 $ pip install pathlib
 
 $ pip install tqdm
-
+```
 # Installation
-
+```
 $ sudo apt-get update
 
 $ cd ~/catkin_ws/src
@@ -23,16 +23,16 @@ $ cd ~/catkin_ws/
 $ catkin_make_isolated
 
 $ source devel_isolated/setup.bash
-
+```
 # Run example
 
-Uruchomienie mapy:
+Run map:
 
-$ roslaunch mapr_project mapr_project.launch
+`$ roslaunch mapr_project mapr_project.launch`
 
-Uruchomienie mapy z rysowaniem sciezki
+Run map with path drawing:
 
-$ roslaunch mapr_project mapr_project_ompl.launch
+`$ roslaunch mapr_project mapr_project_ompl.launch`
 
 
 # Tasks
