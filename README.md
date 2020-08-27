@@ -16,7 +16,7 @@ $ sudo apt-get update
 
 $ cd ~/catkin_ws/src
 
-$ git clone https://github.com/Kamilkim/mapr_project.git
+$ git clone https://github.com/TheGrycek/mapr_project.git
 
 $ cd ~/catkin_ws/
 
